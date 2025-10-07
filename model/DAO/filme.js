@@ -8,15 +8,21 @@
 /***********************************************************************************************************************
  * Exemplo de dependencias para conexão com BD
  *   Banco de Dados relacionais:
- *      Sequelize -> Foi utilizado em  muitos projetos desde o ínicio do node
- *      Prisma    -> É uma dependencia atual que trabalha com BD (SQL ou ORM)
- *      Knex      -> É uma dependencia atual que trabalha com MYSQL
+ *      Sequelize                          -> Foi utilizado em  muitos projetos desde o ínicio do node
+ *      Prisma                             -> É uma dependencia atual que trabalha com BD (SQL ou ORM)
+ *      Knex                               -> É uma dependencia atual que trabalha com MYSQL
+ *      prisma                             -> É a dependencia atual que trabalha com BD(Mysql e etc)
+ *      npm install prisma --save          -> instalar o prisma
+ *      npm install @prisma/client -- save ->  Instalar o cliente do prisma(executar scripts no banco)
+ *      npm prisma init                    -> Propt comando para iniciar o projeto
+ *      npx prisma migrate dev             -> Realiza o sincronismo entre o prisma, mas corre risco de apagar todas as tabelas e dados.
+ *      npx prisma generate                -> Apenas realiza o sicronismo entre o prisma e o BD, geralmente usamos para rodar o  projeto de um PC novo
  * 
- *   Banco de Dados Não relacionais:
- *      mongoose  -> É uma dependencia para o Mongo DB (Não relacional)
+ * 
+ *      Banco de Dados Não relacionais:
+ *      mongoose                           -> É uma dependencia para o Mongo DB (Não relacional)
  * 
  * *********************************************************************************************************************/
-
 
 /* 
    Comandos:
@@ -25,14 +31,16 @@
         npm install  body-parser    --save
         npm install  prisma         --save
         npm install @prisma/client  --save
+        npx prisma migrate dev
+        npx prisma migrate reset
 */
 
 
 //Import da dependencia do Prisma que permite a execução de script SQL no BD
-const { prismaClient } = require('@prisma/client')
+const { PrismaClient } = require('../../generated/prisma')
 
 //Cria um novo objeto baseado na classe do PrismaClient
-const prisma = new prismaClient()
+const prisma = new PrismaClient()
 //Order by : vai dizer a ordem em que os dados vão ser exibidos, ACS e DESC
 //Retorna uma lista de todos os filmes
 //$queryRawUsafe()    -> vai pegar a variavel e envia para o banco de dados e pedimos devolver o  retorno. Por conta do comando ser o (select)
