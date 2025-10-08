@@ -28,8 +28,15 @@ app.use((request, response, next) => {
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
 //EndPoints para a rota de filme
-app.use('/v1/locador/filme', cors(), async function (request,response) {
+app.use('/v1/locador/filmes', cors(), async function (request,response) {
     let filme = await controllerFilme.listarFilmes()
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
+app.use('/v1/locador/filme/:id', cors(), async function (request,response) {
+    let idFilme = request.params.id
+    let filme = await controllerFilme.buscarFilmesId(idFilme)
     response.status(filme.status_code)
     response.json(filme)
 })

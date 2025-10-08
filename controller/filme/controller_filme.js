@@ -9,27 +9,68 @@
 const filmeDAO = require('../../model/DAO/filme.js')
 
 //Importe do arquivo de mensssagens
-const MENSSAGES = require('../modulo/config_menssages.js')
+const DEFAULT_MENSSAGES = require('../modulo/config_menssages.js')
 //Retorna uma lista de todos os filmes
 const listarFilmes = async () => {
 
+    //cRIANDO UM OBJETO NOVO PARA AS MENSAGENS
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     //Chama a funçã do DAO para retornar a lista de filmes do BD
     let resulFilmes = await filmeDAO.getSelectAllFilms();
+    try {
+        if (resulFilmes) {
+            if (resulFilmes.length > 0) {
+                MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
+                MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
+                MENSSAGES.DEFAULT_HEADER.items.filmes = resulFilmes
 
-    if (resulFilmes) {
-        if (resulFilmes.lenght > 0) {
-            MENSSAGES.MENSAGE_HEADER.status = MENSSAGES.MENSSAGE_REQUEST_SUCCESS.status
-            MENSSAGES.MENSAGE_HEADER.status_code = MENSSAGES.MENSSAGE_REQUEST_SUCCESS.status_code
-            MENSSAGES.MENSAGE_HEADER.items.filmes = resulFilmes
-
-            return MENSSAGES.MENSAGE_HEADER
+                return MENSSAGES.DEFAULT_HEADER
+            } else {
+                return MENSSAGES.ERROR_NOT_FOUND
+            }
+        } else {
+            return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
         }
+    } catch (error) {
+        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
+
 
 }
 
 //Retorna um filme pelo ID
 const buscarFilmesId = async (id) => {
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    try {
+    
+        
+        //Validação da chegada do ID
+        if (!isNaN(id)) {
+            let resultFilmes = await filmeDAO.getSelectByFilms(Number(id))
+         
+
+            if (resultFilmes) {
+                if (resultFilmes.length > 0) {
+                    MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST
+                    MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
+                    MENSSAGES.DEFAULT_HEADER.items.filme = resultFilmes
+
+                } else {
+                    return MENSSAGES.ERROR_NOT_FOUND
+                }
+            } else {
+                return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        } else {
+
+            return MENSSAGES.ERROR_REQUIRED_FIELDS
+
+        }
+
+    } catch (error) {
+        return MENSSAGES.ERROR_REQUIRED_FIELDS
+    }
 
 }
 
@@ -49,5 +90,6 @@ const excluirFilme = async (id) => {
 }
 
 module.exports = {
-    listarFilmes
+    listarFilmes,
+    buscarFilmesId,
 }
