@@ -42,19 +42,22 @@ const listarFilmes = async () => {
 const buscarFilmesId = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     try {
-    
-        
+
+
         //Validação da chegada do ID
         if (!isNaN(id)) {
+            //cria uma variável local para executar a função getSelectByFilms, passando para ela o ID
             let resultFilmes = await filmeDAO.getSelectByFilms(Number(id))
-         
 
+            //Se getSelectByFilms tiver sido executado corretamente  ele vai passar nessa primeira verificação, já caso algo estiver errado o valor de resultFilmes será false
             if (resultFilmes) {
+                //Verificando se resulfilmes não está vazio
                 if (resultFilmes.length > 0) {
                     MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST
                     MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
                     MENSSAGES.DEFAULT_HEADER.items.filme = resultFilmes
 
+                    return MENSSAGES.DEFAULT_HEADER
                 } else {
                     return MENSSAGES.ERROR_NOT_FOUND
                 }
