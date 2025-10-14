@@ -10,6 +10,9 @@ const express = require('express')//Responsável pela API
 const cors = require('cors')//Responsável pela permissão de API(APP)
 const bodyParser = require('body-parser')//Responsável por gerenciar a chegada dos dados da API com o front
 
+//Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
+const bodyParserJSON = bodyParser.json()
+
 
 const app = express()
 
@@ -28,18 +31,32 @@ app.use((request, response, next) => {
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
 //EndPoints para a rota de filme
-app.use('/v1/locador/filmes', cors(), async function (request,response) {
+app.get('/v1/locador/filmes', cors(), async function (request,response) {
     let filme = await controllerFilme.listarFilmes()
     response.status(filme.status_code)
     response.json(filme)
 })
 
-app.use('/v1/locador/filme/:id', cors(), async function (request,response) {
+app.get('/v1/locador/filme/:id', cors(), async function (request,response) {
     let idFilme = request.params.id
     let filme = await controllerFilme.buscarFilmesId(idFilme)
     response.status(filme.status_code)
     response.json(filme)
 })
+app.post('/v1/locador/filme', cors(),bodyParserJSON, async function (request,response) {
+    
+    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
+    let contentType = request.headers['content-type']
+
+    let filme = await controllerFilme.inserirFilme(dadosBody,contentType)
+    console.log(filme)
+    response.status(filme.status_code)
+    response.json(filme)
+
+})
+
 
 app.listen(PORT, function () {
     console.log('API aguardando requisições.....')
