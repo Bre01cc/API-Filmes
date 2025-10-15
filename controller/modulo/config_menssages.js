@@ -52,6 +52,16 @@ const SUCCESS_REQUEST = {
     status_code: 200,
     message: "Requisição bem sucedida!!!"
 }
+const SUCCESS_DELETE = {
+    status: true,
+    status_code: 200,
+    message: "Delete realizado com sucesso!!!"
+}
+const SUCCESS_UPDATE_ITEM = {
+    status: true,
+    status_code: 200,
+    message: "Item atualizado com sucesso!!!"
+}
 const SUCCESS_CREATED_ITEM ={
     status: true,
     status_code: 201,
@@ -67,7 +77,9 @@ module.exports = {
     ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_REQUIRED_FIELDS,
-    ERROR_CONTENT_TYPE
+    ERROR_CONTENT_TYPE,
+    SUCCESS_UPDATE_ITEM,
+    SUCCESS_DELETE
    
 }
 

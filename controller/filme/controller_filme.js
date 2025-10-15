@@ -67,6 +67,7 @@ const buscarFilmesId = async (id) => {
 
         } else {
 
+            MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
             return MENSSAGES.ERROR_REQUIRED_FIELDS
 
         }
@@ -99,7 +100,7 @@ const inserirFilme = async (filme, contentType) => {
                     MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_CREATED_ITEM.status
                     MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_CREATED_ITEM.status_code
                     MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_CREATED_ITEM.message
-                    MENSSAGES.DEFAULT_HEADER.items = filme
+                    MENSSAGES.DEFAULT_HEADER.items.filme = filme
 
 
                     return MENSSAGES.DEFAULT_HEADER//201
@@ -124,12 +125,83 @@ const inserirFilme = async (filme, contentType) => {
 }
 
 //Atualiza um filme buscando pelo ID
-const atualizarFilme = async (filme, id) => {
+const atualizarFilme = async (filme, id, contentType) => {
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
+    try {
+        //Validação das entradas de dados
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+
+            // Validação de id, se existe no BD
+
+            //Chama a função de validar todos os dados do filme
+            let validar = await validarDadosFilmes(filme)
+
+            if (!validar) {
+                // Validação de id, chamndo a função que verifica no BD
+                let validarId = await buscarFilmesId(id)
+                if (validarId.status_code == 200) {
+                    // adiciona o ID do filme no JSON de dados para ser encaminhado
+                    filme.id = Number(id)
+
+                    //Chama a função para inserir um novo filme no BD
+                    let resultFilmes = await filmeDAO.setUpdateFilms(filme)
+                    if (resultFilmes) {
+
+                        MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_UPDATE_ITEM.status
+                        MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_UPDATE_ITEM.status_code
+                        MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_UPDATE_ITEM.message
+                        MENSSAGES.DEFAULT_HEADER.items.filme = filme
+
+
+                        return MENSSAGES.DEFAULT_HEADER//200
+
+                    } else {
+
+                        return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
+                    }
+                } else {
+                    return validarId//a função podera retornar (400 ou 404 ou 500)
+                }
+            }
+            else {
+                return validar //400 referentes a validação dos dados
+            }
+        }
+        else {
+            return MENSSAGES.ERROR_CONTENT_TYPE//415
+        }
+    } catch (error) {
+        console.log(error)
+        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
+    }
 }
 
 //Exclui um filme buscando pelo ID
 const excluirFilme = async (id) => {
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    //Chama a funçã do DAO para retornar a lista de filmes do BD
+    try {
+
+        let validarId = await buscarFilmesId(id)
+        if (validarId.status_code == 200) {
+            
+            deletarFilme = await filmeDAO.setDeleteFilms(id);
+            MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
+            MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
+            MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
+            return MENSSAGES.DEFAULT_HEADER
+
+        } else {
+            return validarId
+        }
+
+    } catch (error) {
+        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
+    }
+
+
+
 
 }
 
@@ -176,5 +248,6 @@ const validarDadosFilmes = async (filme) => {
 module.exports = {
     listarFilmes,
     buscarFilmesId,
-    inserirFilme
+    inserirFilme,
+    excluirFilme
 }
