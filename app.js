@@ -49,6 +49,7 @@ app.post('/v1/locador/filme', cors(),bodyParserJSON, async function (request,res
     let dadosBody = request.body
     //Recebe o tipo de dado da requisição (JSON,XML ou ...)
     let contentType = request.headers['content-type']
+    console.log(contentType)
 
     let filme = await controllerFilme.inserirFilme(dadosBody,contentType)
     console.log(filme)
