@@ -99,6 +99,20 @@ const getSelectByFilms = async (id) => {
 
 }
 
+const getSelectLastId = async () => {
+    try {
+        let sql = `select id_filme from tbl_filme order by id_filme desc limit 1;`
+        let result = await prisma.$queryRawUnsafe(sql)
+        if (Array.isArray(result)) {
+            return Number(result[0].id_filme)
+        } else {
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
+}
 //Insere um filme novo no banco de dados
 const setInsertFilms = async (filme) => {
     try {
@@ -116,7 +130,7 @@ VALUES(
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
             return true
-        }else{
+        } else {
             return false
         }
     } catch (error) {
@@ -127,7 +141,7 @@ VALUES(
 //Altera um filme no banco de dados
 const setUpdateFilms = async (filme) => {
     try {
-        let sql =`Update tbl_filme
+        let sql = `Update tbl_filme
         set nome =  '${filme.nome}',
         sinopse =   '${filme.sinopse}',
         data_lancamento =   '${filme.data_lancamento}',
@@ -140,11 +154,11 @@ const setUpdateFilms = async (filme) => {
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
             return true
-        }else{
+        } else {
             return false
         }
-    } 
-   
+    }
+
     catch (error) {
         console.log(error)
         return false
@@ -154,16 +168,16 @@ const setUpdateFilms = async (filme) => {
 //Exclui um filme pelo ID no banco de dados
 const setDeleteFilms = async (id) => {
     try {
-        let sql =`delete from tbl_filme where id_filme = ${id}`
+        let sql = `delete from tbl_filme where id_filme = ${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
             return true
-        }else{
+        } else {
             return false
         }
-    } 
-   
+    }
+
     catch (error) {
         console.log(error)
         return false
@@ -175,5 +189,6 @@ module.exports = {
     getSelectByFilms,
     setInsertFilms,
     setUpdateFilms,
-    setDeleteFilms
+    setDeleteFilms,
+    getSelectLastId
 }

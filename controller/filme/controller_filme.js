@@ -78,6 +78,7 @@ const buscarFilmesId = async (id) => {
 
 }
 
+
 //Inserir uma lista de todos os filmes
 const inserirFilme = async (filme, contentType) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
@@ -95,19 +96,27 @@ const inserirFilme = async (filme, contentType) => {
 
                 //Chama a função para inserir um novo filme no BD
                 let resultFilmes = await filmeDAO.setInsertFilms(filme)
+
                 if (resultFilmes) {
+                    //Chama a  função para receber o ID gerado no BD
+                    let lastID = await filmeDAO.getSelectLastId();
+                    if (lastID) {
+                        //Adiciona o ID no JSON com os dados do filme
+                        filme.id = lastID
+                        MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_CREATED_ITEM.status
+                        MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_CREATED_ITEM.status_code
+                        MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_CREATED_ITEM.message
+                        MENSSAGES.DEFAULT_HEADER.items = filme
 
-                    MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_CREATED_ITEM.status
-                    MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_CREATED_ITEM.status_code
-                    MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_CREATED_ITEM.message
-                    MENSSAGES.DEFAULT_HEADER.items.filme = filme
+                        return MENSSAGES.DEFAULT_HEADER//201
 
-
-                    return MENSSAGES.DEFAULT_HEADER//201
+                    } else {
+                        return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
+                    }
 
                 } else {
-
-                    return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+                    
+                    return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
                 }
             }
             else {
@@ -118,7 +127,6 @@ const inserirFilme = async (filme, contentType) => {
             return MENSSAGES.ERROR_CONTENT_TYPE
         }
     } catch (error) {
-        console.log(error)
         return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 
@@ -185,11 +193,12 @@ const excluirFilme = async (id) => {
 
         let validarId = await buscarFilmesId(id)
         if (validarId.status_code == 200) {
-            
+
             deletarFilme = await filmeDAO.setDeleteFilms(id);
             MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
             MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
             MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
+            delete MENSSAGES.DEFAULT_HEADER.items
             return MENSSAGES.DEFAULT_HEADER
 
         } else {
