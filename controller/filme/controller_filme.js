@@ -9,12 +9,12 @@
 const filmeDAO = require('../../model/DAO/filme.js')
 
 //Importe do arquivo de mensssagens
-const DEFAULT_MENSSAGES = require('../modulo/config_menssages.js')
+const DEFAULT_MENSSAGENS = require('../modulo/config_menssages.js')
 //Retorna uma lista de todos os filmes
 const listarFilmes = async () => {
 
     //cRIANDO UM OBJETO NOVO PARA AS MENSAGENS
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     //Chama a funçã do DAO para retornar a lista de filmes do BD
     let resulFilmes = await filmeDAO.getSelectAllFilms();
     try {
@@ -40,7 +40,7 @@ const listarFilmes = async () => {
 
 //Retorna um filme pelo ID
 const buscarFilmesId = async (id) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     try {
 
 
@@ -81,7 +81,7 @@ const buscarFilmesId = async (id) => {
 
 //Inserir uma lista de todos os filmes
 const inserirFilme = async (filme, contentType) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
 
     try {
@@ -134,7 +134,7 @@ const inserirFilme = async (filme, contentType) => {
 
 //Atualiza um filme buscando pelo ID
 const atualizarFilme = async (filme, id, contentType) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
     try {
         //Validação das entradas de dados
@@ -156,17 +156,17 @@ const atualizarFilme = async (filme, id, contentType) => {
                     let resultFilmes = await filmeDAO.setUpdateFilms(filme)
                     if (resultFilmes) {
 
-                        MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_UPDATE_ITEM.status
-                        MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_UPDATE_ITEM.status_code
-                        MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_UPDATE_ITEM.message
-                        MENSSAGES.DEFAULT_HEADER.items.filme = filme
+                        MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_UPDATE_ITEM.status
+                        MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_UPDATE_ITEM.status_code
+                        MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_UPDATE_ITEM.message
+                        MENSSAGENS.DEFAULT_HEADER.items.filme = filme
 
 
-                        return MENSSAGES.DEFAULT_HEADER//200
+                        return MENSSAGENS.DEFAULT_HEADER//200
 
                     } else {
 
-                        return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
+                        return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL//500
                     }
                 } else {
                     return validarId//a função podera retornar (400 ou 404 ou 500)
@@ -177,17 +177,17 @@ const atualizarFilme = async (filme, id, contentType) => {
             }
         }
         else {
-            return MENSSAGES.ERROR_CONTENT_TYPE//415
+            return MENSSAGENS.ERROR_CONTENT_TYPE//415
         }
     } catch (error) {
         console.log(error)
-        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
+        return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
 
 //Exclui um filme buscando pelo ID
 const excluirFilme = async (id) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     //Chama a funçã do DAO para retornar a lista de filmes do BD
     try {
 
@@ -216,7 +216,7 @@ const excluirFilme = async (id) => {
 
 //Validação dos dados de cadastro e atualização de filmes
 const validarDadosFilmes = async (filme) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
     if (filme.nome == '' || filme.nome == undefined || filme.nome == null || filme.nome.length > 100) {
         MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
@@ -227,7 +227,7 @@ const validarDadosFilmes = async (filme) => {
         MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Sinopse incorreto]'
         return MENSSAGES.ERROR_REQUIRED_FIELDS
 
-    } if (filme.data_lancamento == undefined || filme.data_lancamento.length != 10) {
+    } else if (filme.data_lancamento == undefined || filme.data_lancamento.length != 10) {
         MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Data_lancamento incorreto]'
         return MENSSAGES.ERROR_REQUIRED_FIELDS
 

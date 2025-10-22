@@ -30,7 +30,9 @@ app.use((request, response, next) => {
 
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
-//EndPoints para a rota de filme
+const controllerGenero = require('./controller/genero/controller_genero.js')
+
+//EndPoints para a rota de Filme
 app.get('/v1/locador/filmes', cors(), async function (request, response) {
     let filme = await controllerFilme.listarFilmes()
     response.status(filme.status_code)
@@ -74,6 +76,44 @@ app.delete('/v1/locador/deletar/filme/:id', cors(), async function (request, res
     response.status(filme.status_code)
     response.json(filme)
 })
+
+
+
+//EndPoints para a rota de Genero
+app.get('/v1/locador/generos', cors(), async function (request, response) {
+    let genero = await controllerGenero.listarGenero()
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+app.get('/v1/locador/genero/:id', cors(), async function (request, response) {
+    let idGenero = request.params.id
+    let genero = await controllerGenero.buscarGeneroId(idGenero)
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+app.post('/v1/locador/adicionar/genero', cors(), bodyParserJSON, async function (request, response) {
+
+    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
+    let contentType = request.headers['content-type']
+    // console.log(contentType)
+
+    let genero = await controllerGenero.inserirFilme(dadosBody, contentType)
+    // console.log(filme)
+    response.status(genero.status_code)
+    response.json(genero)
+
+})
+
+
+
+
+
+
+
 
 
 app.listen(PORT, function () {

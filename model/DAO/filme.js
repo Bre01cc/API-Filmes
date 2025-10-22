@@ -113,6 +113,7 @@ const getSelectLastId = async () => {
         return false
     }
 }
+
 //Insere um filme novo no banco de dados
 const setInsertFilms = async (filme) => {
     try {
