@@ -32,6 +32,9 @@ const controllerFilme = require('./controller/filme/controller_filme.js')
 
 const controllerGenero = require('./controller/genero/controller_genero.js')
 
+const controllerIdioma = require('./controller/idioma/controller_Idioma.js')
+
+
 //EndPoints para a rota de Filme
 app.get('/v1/locador/filmes', cors(), async function (request, response) {
     let filme = await controllerFilme.listarFilmes()
@@ -125,6 +128,42 @@ app.delete('/v1/locador/deletar/genero/:id', cors(), async function (request, re
     let genero = await controllerGenero.excluirGenero(idGenero)
     response.status(genero.status_code)
     response.json(genero)
+})
+
+
+
+app.get('/v1/locador/idiomas', cors(), async function (request, response) {
+    let idioma = await controllerIdioma.listarIdiomas()
+    response.status(idioma.status_code)
+    response.json(idioma)
+})
+
+app.get('/v1/locador/idioma/:id', cors(), async function (request, response) {
+    let IDidioma = request.params.id
+    let idioma = await controllerIdioma.buscarIdiomasId(IDidioma)
+    response.status(idioma.status_code)
+    response.json(idioma)
+})
+app.post('/v1/locador/adicionar/idioma', cors(), bodyParserJSON, async function (request, response) {
+
+    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
+    let contentType = request.headers['content-type']
+    // console.log(contentType)
+
+    let idioma = await controllerIdioma.inserirIdioma(dadosBody, contentType)
+    // console.log(filme)
+    response.status(idioma.status_code)
+    response.json(idioma)
+
+})
+
+app.delete('/v1/locador/idioma/:id', cors(), async function (request, response) {
+    let IDidioma = request.params.id
+    let idioma = await controllerIdioma.excluirIdioma(IDidioma)
+    response.status(idioma.status_code)
+    response.json(idioma)
 })
 
 

@@ -200,7 +200,7 @@ const excluirGenero = async (id) => {
         let validarId = await buscarGeneroId(id)
         if (validarId.status_code == 200) {
 
-            deletarFilme = await generoDAO.setDeleteGenero(id);
+            let deletarGenero = await generoDAO.setDeleteGenero(id);
             MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
             MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
             MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
