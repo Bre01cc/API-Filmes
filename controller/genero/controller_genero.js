@@ -3,12 +3,11 @@
 const generoDAO = require('../../model/DAO/genero.js')
 const DEFAULT_MENSSAGES = require('../modulo/config_menssages.js')
 
-//Retorna todos os generos
+//Retorna todos os gêneros
 const listarGenero = async () => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     let resultGenero = await generoDAO.getSelectAllGenero()
-    console.log(resultGenero)
     try {
         if (resultGenero) {
             if (resultGenero.length > 0) {
@@ -31,7 +30,7 @@ const listarGenero = async () => {
 }
 
 
-//Retorna o genero pelo Id
+//Retorna o gênero pelo Id
 const buscarGeneroId = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -69,7 +68,7 @@ const buscarGeneroId = async (id) => {
     }
 }
 
-//Insere um genero 
+//Insere um gênero 
 const inserirGenero = async (genero, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     try {
@@ -115,8 +114,8 @@ const inserirGenero = async (genero, contentType) => {
 
 }
 
-//Atualizar os dados do genero
-const atualizarGenero = async (filme, id, contentType) => {
+//Atualizar os dados de um gênero
+const atualizarGenero = async (genero, id, contentType) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     try {
@@ -125,24 +124,24 @@ const atualizarGenero = async (filme, id, contentType) => {
 
             // Validação de id, se existe no BD
 
-            //Chama a função de validar todos os dados do filme
-            let validar = await validarDadosFilmes(filme)
+            //Chama a função de validar todos os dados
+            let validar = await validarGenero(genero)
 
             if (!validar) {
                 // Validação de id, chamndo a função que verifica no BD
-                let validarId = await buscarFilmesId(id)
+                let validarId = await buscarGeneroId(id)
                 if (validarId.status_code == 200) {
-                    // adiciona o ID do filme no JSON de dados para ser encaminhado
-                    filme.id = Number(id)
+                    // adiciona o ID no JSON de dados para ser encaminhado
+                    genero.id = Number(id)
 
-                    //Chama a função para inserir um novo filme no BD
-                    let resultFilmes = await filmeDAO.setUpdateFilms(filme)
-                    if (resultFilmes) {
+                    //Chama a função para inserir um novo item no BD
+                    let resultGenero = await generoDAO.setUpdateGenero(genero)
+                    if (resultGenero) {
 
                         MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_UPDATE_ITEM.status
                         MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_UPDATE_ITEM.status_code
                         MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_UPDATE_ITEM.message
-                        MENSSAGES.DEFAULT_HEADER.items.filme = filme
+                        MENSSAGES.DEFAULT_HEADER.items.genero = genero
 
 
                         return MENSSAGES.DEFAULT_HEADER//200
@@ -169,6 +168,7 @@ const atualizarGenero = async (filme, id, contentType) => {
 }
 
 
+//Valida os dados de um gênero
 const validarGenero = (genero) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -191,8 +191,41 @@ const validarGenero = (genero) => {
     }
 }
 
+//Deleta um gênero pelo ID
+const excluirGenero = async (id) => {
+       let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    //Chama a funçã do DAO para retornar a lista de filmes do BD
+    try {
+
+        let validarId = await buscarGeneroId(id)
+        if (validarId.status_code == 200) {
+
+            deletarFilme = await generoDAO.setDeleteGenero(id);
+            MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
+            MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
+            MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
+            delete MENSSAGES.DEFAULT_HEADER.items
+            return MENSSAGES.DEFAULT_HEADER
+
+        } else {
+            return validarId
+        }
+
+    } catch (error) {
+        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
+    }
+
+
+
+
+}
+
+
+//Exporte das funções
 module.exports = {
     listarGenero,
     buscarGeneroId,
-    inserirFilme
+    inserirGenero,
+    atualizarGenero,
+    excluirGenero
 }

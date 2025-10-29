@@ -101,13 +101,31 @@ app.post('/v1/locador/adicionar/genero', cors(), bodyParserJSON, async function 
     let contentType = request.headers['content-type']
     // console.log(contentType)
 
-    let genero = await controllerGenero.inserirFilme(dadosBody, contentType)
+    let genero = await controllerGenero.inserirGenero(dadosBody, contentType)
     // console.log(filme)
     response.status(genero.status_code)
     response.json(genero)
 
 })
 
+app.put('/v1/locador/atualizar/genero/:id', bodyParserJSON, cors(), async function (request, response) {
+    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
+    let contentType = request.headers['content-type']
+    // console.log(contentType)
+    let idGenero= request.params.id
+    let genero = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+app.delete('/v1/locador/deletar/genero/:id', cors(), async function (request, response) {
+    let idGenero = request.params.id;
+    let genero = await controllerGenero.excluirGenero(idGenero)
+    response.status(genero.status_code)
+    response.json(genero)
+})
 
 
 

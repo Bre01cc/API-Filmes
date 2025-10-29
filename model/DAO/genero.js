@@ -66,6 +66,8 @@ const getSelectByGenero = async (id) => {
     }
 
 }
+
+//Busca o ID do último gênero
 const getSelectLastId = async () => {
     try {
         let sql = `select id_genero from tbl_genero order by id_genero desc limit 1;`
@@ -81,6 +83,7 @@ const getSelectLastId = async () => {
     }
 }
 
+//Inseri um novo gênero 
 const setInsertGeneros = async (genero) => {
     try {
 
@@ -100,11 +103,54 @@ VALUES(
         return false
     }
 }
+
+//Atualiza o gênero pelo ID
+const setUpdateGenero = async (genero) =>{
+     try {
+        let sql = `Update tbl_genero
+        set nome = '${genero.nome}',
+        descricao = '${genero.descricao}',
+        data_criacao = '${genero.data_criacao}'
+        where id_genero = ${genero.id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+//Deleta um gênero pelo ID
+const setDeleteGenero = async (id) => {
+    try {
+        let sql = `delete from tbl_genero where id_genero = ${id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    catch (error) {
+        console.log(error)
+        return false
+    }
+}
+
+//Exporte das funções
 module.exports = {
     getSelectAllGenero,
     getSelectByGenero,
     setInsertGeneros,
-    getSelectLastId
+    getSelectLastId,
+    setUpdateGenero,
+    setDeleteGenero
 }
 
 
