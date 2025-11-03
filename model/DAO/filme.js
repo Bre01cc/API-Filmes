@@ -66,7 +66,6 @@ const getSelectAllFilms = async () => {
 
 
     } catch (error) {
-        // console.log(error)
         return false
 
     }
@@ -92,7 +91,6 @@ const getSelectByFilms = async (id) => {
 
 
     } catch (error) {
-        // console.log(error)
         return false
 
     }
@@ -161,7 +159,6 @@ const setUpdateFilms = async (filme) => {
     }
 
     catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -180,7 +177,6 @@ const setDeleteFilms = async (id) => {
     }
 
     catch (error) {
-        console.log(error)
         return false
     }
 }

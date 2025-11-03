@@ -35,7 +35,6 @@ const getSelectAllIdioma = async () => {
 
 
     } catch (error) {
-        // console.log(error)
         return false
 
     }
@@ -61,25 +60,78 @@ const setIdioma = async (idioma) => {
 
     try {
         let sql = ''
-        console.log(idioma.data_criacao)
-        if (idioma.data_criacao === undefined) {
-           
-            sql = `insert into tbl_idioma(nome,sigla,familia_linguistica,descricao)
+        if (!('descricao' in idioma) && !('antes_de_cristo' in idioma)) {
+            sql = `insert into tbl_idioma(sigla,data_criacao,familia_linguistica)
             values(
-             '${idioma.nome}',
+            
              '${idioma.sigla}',
-             '${idioma.familia_linguistica}',
-             '${idioma.descricao}'
+             '${idioma.data_criacao}',
+             '${idioma.familia_linguistica}'
             ); `
         }
-      
+        else if (!('descricao' in idioma)) {
+            sql = `insert into tbl_idioma(sigla,data_criacao,familia_linguistica,antes_de_cristo)
+            values(
+            
+             '${idioma.sigla}',
+             '${idioma.data_criacao}',
+             '${idioma.familia_linguistica}',
+             '${idioma.antes_de_cristo}'
+            );
+            `}
+        else if (!('antes_de_cristo' in idioma)) {
+            sql = `insert into tbl_idioma(sigla,data_criacao,familia_linguistica,descricao)
+            values(
+            
+             '${idioma.sigla}',
+             '${idioma.data_criacao}',
+             '${idioma.familia_linguistica}',
+             '${idioma.descricao}'
+            );
+            `
+        }
+        else {
+            sql = `insert into tbl_idioma(sigla,data_criacao,familia_linguistica,descricao,antes_de_cristo)
+            values(
+            
+             '${idioma.sigla}',
+             '${idioma.data_criacao}',
+             '${idioma.familia_linguistica}',
+             '${idioma.descricao}',
+             '${idioma.antes_de_cristo}'
+            ); `
+        }
+
         let resultIdioma = await prisma.$queryRawUnsafe(sql)
 
-        if (Array.isArray(resultIdioma))
-            return resultIdioma
+        if (resultIdioma)
+            return true
         else
             return false
 
+    } catch (error) {
+        return false
+    }
+}
+
+const setUpdateIdioma = async(idioma)=>{
+
+    try {
+         let sql = `Update tbl_idioma
+        set sigla = '${idioma.sigla}',
+        descricao = '${idioma.descricao}',
+        data_criacao = '${idioma.data_criacao}',
+        familia_linguistica = '${idioma.familia_linguistica}',
+        antes_de_cristo = '${idioma.antes_de_cristo}'
+        where id_idioma = ${idioma.id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+        
     } catch (error) {
         return false
     }
@@ -103,11 +155,28 @@ const setDeleteIdioma = async (id) => {
     }
 }
 
+const getSelectLastIdIdioma = async () => {
+    try {
+        let sql = `select id_idioma from tbl_idioma order by id_idioma desc limit 1;`
+        let result = await prisma.$queryRawUnsafe(sql)
+        if (Array.isArray(result)) {
+            return Number(result[0].id_idioma)
+        } else {
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
+}
 
 
 module.exports = {
     getSelectAllIdioma,
     setDeleteIdioma,
     getSelectByIdioma,
-    setIdioma
+    setIdioma,
+    getSelectLastIdIdioma,
+    setUpdateIdioma
+
 }

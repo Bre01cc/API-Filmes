@@ -3,6 +3,7 @@ CREATE DATABASE db_locadora_filme_ds2m_25_2;
 USE db_locadora_filme_ds2m_25_2;
 
 
+-- Criação da tabela filmar
 CREATE TABLE tbl_filme(
 	id_filme        int             primary key auto_increment,
 	nome            VARCHAR(100)     not null,
@@ -15,6 +16,7 @@ CREATE TABLE tbl_filme(
 ALTER table tbl_filme add COLUMN sinopse Text null;
 ALTER table tbl_filme MODIFY data_lancamento DATE null;
 
+-- Insert de dados
 INSERT INTO tbl_filme(nome,data_lancamento,orcamento,duracao,trailer,capa,sinopse)
 VALUES('Bob-esponja','2025-07-15',22500.00,'02:09:00','https://www.youtube.com/watch?v=LcC-jBJRzXg','https://br.web.img3.acsta.net/c_310_420/pictures/14/12/19/17/48/225645.jpg',
 'Incomodado com o sucesso do Siri Cascudo, a lanchonete do Sr. Sirigueijo que tem a exclusividade na produção do hambúrguer de siri, Plankton, o dono da lanchonete Balde de Lixo, resolve traçar uma verdadeira estratégia de guerra para roubar a fórmula da iguaria, que é a base da alimentação da população da Fenda do Biquíni. Mas alguma coisa sai errado e a fórmula desaparece, deixando a uma vez pacata comunidade à beira do apocalipse. Agora, Bob Esponja, o funcionário padrão do Siri Cascudo, vai ter que unir forças com o ambicioso Plankton em uma viagem no tempo e no espaço para tentar recuperar a receita, contando com a ajuda da leal estrela-do-mar Patrick, do sarcástico Lula Molusco, da esquilo cientista Sandy e também o mercenário Sr. Sirigueijo. Outro interessado na fórmula é o malvado pirata Barba Burguer (Antonio Banderas), que os heróis terão de enfrentar em uma batalha fora da água.');
@@ -34,70 +36,3 @@ VALUES(
 
 alter table tbl_filme MODIFY column orcamento DECIMAL(11,2);
 
-
-
-
--- Criação da tabela
-CREATE TABLE tbl_genero (
-    id_genero INT PRIMARY KEY auto_increment,
-    nome VARCHAR(100) NOT NULL,
-    descricao VARCHAR(500) NOT NULL,
-    data_criacao DATE NULL
-);
-
--- Inserção de dados de exemplo
-INSERT INTO tbl_genero (nome, descricao, data_criacao)
-VALUES 
-('Ação', 'Filmes com cenas de ação intensa e aventura', '2025-10-28'),
-('Comédia', 'Filmes que têm como objetivo principal fazer rir', '2025-10-28'),
-('Drama', 'Filmes com forte carga emocional e narrativa envolvente', '2025-10-28'),
-('Terror', 'Filmes que provocam medo ou tensão no espectador', '2025-10-28'),
-('Ficção Científica', 'Filmes que exploram ciência e tecnologia futurista', '2025-10-28');
-
-
-create table tbl_idioma(
-    id_idioma int primary key auto_increment,
-    sigla varchar(10) not null,
-    data_criacao date not null,
-    descricao varchar(500) null,
-    familia_linguistica varchar(500) null
-);
-
-alter table tbl_idioma add column antes_de_cristo BOOLEAN DEFAULT FALSE;
-
-insert into tbl_idioma(sigla,data_criacao,descricao,familia_linguistica,antes_de_cristo)
-values(
-    'pt-br','1532-01-01','O português brasileiro é a variante do idioma português falada no Brasil. Possui vocabulário, pronúncia e expressões próprias, 
-    influenciadas por línguas indígenas, africanas e europeias, e é a língua oficial do país,
-     utilizada em todos os contextos sociais, culturais e administrativos.','LATIM',FALSE
-);
-
-insert into tbl_idioma(sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo)
-values(
-    'en-us','1607-01-01','O inglês americano é a variedade da língua inglesa falada nos Estados Unidos. Apresenta diferenças de vocabulário, pronúncia e gramática em relação ao inglês britânico, refletindo influências de imigrantes e povos nativos.','GERMÂNICA',FALSE
-);
-
-insert into tbl_idioma(sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo)
-values(
-    'es-es','1200-01-01','O espanhol da Espanha é a forma original do idioma espanhol, derivado do latim vulgar e com influências árabes e germânicas. É a base para as variações faladas na América Latina.','LATIM',FALSE
-);
-
-insert into tbl_idioma(sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo)
-values(
-    'fr-fr','842-01-01','O francês é uma língua românica originada do latim, desenvolvida na região da Gália. É conhecida por sua influência cultural, literária e diplomática no mundo.','LATIM',FALSE
-);
-
-insert into tbl_idioma(sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo)
-values(
-    'de-de','1050-01-01','O alemão é uma língua germânica falada principalmente na Alemanha, Áustria e Suíça. Apresenta forte estrutura gramatical e amplo vocabulário técnico e filosófico.','GERMÂNICA',FALSE
-);
-
-insert into tbl_idioma(sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo)
-values(
-    'zh-cn','1250-01-01','O chinês mandarim é o principal dialeto da China e uma das línguas mais faladas do mundo. Possui escrita ideográfica e longa tradição cultural e literária.','SINO-TIBETANA',FALSE
-);
-
-insert into tbl_idioma(sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo)
-values(
-    'gr-anc','0500-01-01','O grego antigo era falado nas cidades-estado da Grécia Antiga e influenciou profundamente a filosofia, a ciência e as línguas europeias modernas.','INDO-EUROPEIA',TRUE
-);

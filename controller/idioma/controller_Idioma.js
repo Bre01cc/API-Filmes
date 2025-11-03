@@ -1,9 +1,9 @@
 const idiomaDAO = require('../../model/DAO/idioma.js')
-const DEFAULT_MENSSAGES = require('../modulo/config_menssages.js')
+const DEFAULT_MENSSAGENS = require('../modulo/config_menssages.js')
 
 
 const listarIdiomas = async () => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
 
     try {
@@ -12,27 +12,27 @@ const listarIdiomas = async () => {
         if (resultIdioma) {
 
             if (resultIdioma.length > 0) {
-                MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
-                MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
-                MENSSAGES.DEFAULT_HEADER.items.idiomas = resultIdioma
-                return MENSSAGES.DEFAULT_HEADER//201
+                MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_REQUEST.status
+                MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_REQUEST.status_code
+                MENSSAGENS.DEFAULT_HEADER.items.idiomas = resultIdioma
+                return MENSSAGENS.DEFAULT_HEADER//201
 
             } else {
-                return MENSSAGES.ERROR_NOT_FOUND//404
+                return MENSSAGENS.ERROR_NOT_FOUND//404
             }
         } else {
-            return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
+            return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL//500
         }
 
     } catch (error) {
-        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER//500
+        return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER//500
 
     }
 }
 
 
 const buscarIdiomasId = async (id) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     try {
 
 
@@ -45,79 +45,46 @@ const buscarIdiomasId = async (id) => {
             if (resultIdioma) {
 
                 if (resultIdioma.length > 0) {
-                    MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
-                    MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
-                    MENSSAGES.DEFAULT_HEADER.items.idioma = resultIdioma
-                    return MENSSAGES.DEFAULT_HEADER
+                    MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_REQUEST.status
+                    MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_REQUEST.status_code
+                    MENSSAGENS.DEFAULT_HEADER.items.idioma = resultIdioma
+                    return MENSSAGENS.DEFAULT_HEADER
                 } else {
-                    return MENSSAGES.ERROR_NOT_FOUND
+                    return MENSSAGENS.ERROR_NOT_FOUND
                 }
             } else {
-                return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+                return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL
             }
 
         } else {
 
-            MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
-            return MENSSAGES.ERROR_REQUIRED_FIELDS
+            MENSSAGENS.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
+            return MENSSAGENS.ERROR_REQUIRED_FIELDS
 
         }
 
     } catch (error) {
-        return MENSSAGES.ERROR_REQUIRED_FIELDS
+        return MENSSAGENS.ERROR_REQUIRED_FIELDS
     }
 
 }
 
 const excluirIdioma = async (id) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     try {
 
         let validarId = await buscarIdiomasId(id)
         if (validarId.status_code == 200) {
 
             let deletarIdioma = await idiomaDAO.setDeleteIdioma(id);
-            MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
-            MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
-            MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
-            delete MENSSAGES.DEFAULT_HEADER.items
-            return MENSSAGES.DEFAULT_HEADER
+            MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_DELETE.status
+            MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_DELETE.status_code
+            MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_DELETE.message
+            delete MENSSAGENS.DEFAULT_HEADER.items
+            return MENSSAGENS.DEFAULT_HEADER
 
         } else {
             return validarId
-        }
-
-    } catch (error) {
-        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
-    }
-}
-
-const inserirIdioma = async (idioma, contentType) => {
-    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
-    try {
-        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
-
-            let validar = await validarIdioma(idioma);
-
-            if (!validar) {
-                let resultidioma = await idiomaDAO.setIdioma(idioma)
-
-                if (resultidioma) {
-                    MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_CREATED_ITEM.status
-                    MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_CREATED_ITEM.status_code
-                    MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_CREATED_ITEM.message
-                    MENSSAGENS.DEFAULT_HEADER.items = genero
-
-                    return MENSSAGENS.DEFAULT_HEADER//200
-
-                } else {
-                    return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL
-                }
-            } else {
-                return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL
-            }
-        } else {
-            return validar//500
         }
 
     } catch (error) {
@@ -125,46 +92,159 @@ const inserirIdioma = async (idioma, contentType) => {
     }
 }
 
-const validarIdioma = async (idioma) => {
-    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+const inserirIdioma = async (idioma, contentType) => {
+    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
-    //Validação do nome
-    if (idioma.nome == '' || idioma.nome == undefined || idioma.nome == null || idioma.nome.length > 100) {
-        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
+    try {
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-        return MENSSAGES.ERROR_REQUIRED_FIELDS
+            let validar = await validarIdioma(idioma);
 
-    }
-    else if (idioma.sigla == '' || idioma.sigla == undefined || idioma.sigla == null || idioma.sigla.length > 10) {
-        console.log('aqui')
-        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Sigla incorreto]'
-        return MENSSAGES.ERROR_REQUIRED_FIELDS
-    }
-    //Validação da descrição
-    else if (idioma.descricao.length > 500) {
-        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Descrição incorreta]'
-        return MENSSAGES.ERROR_REQUIRED_FIELDS
-    }
-    if (idioma.data_criaca) {
+            if (!validar) {
 
-        if (idioma.data_criacao.length != 10) {
-            MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Data de criação incorreta]'
-            return MENSSAGES.ERROR_REQUIRED_FIELDS
+
+                let resultidioma = await idiomaDAO.setIdioma(idioma)
+
+                if (resultidioma) {
+
+                    let ultimoId = await idiomaDAO.getSelectLastIdIdioma()
+
+                    if (ultimoId) {
+                        idioma.id = ultimoId
+                        MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_CREATED_ITEM.status
+                        MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_CREATED_ITEM.status_code
+                        MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_CREATED_ITEM.message
+                        MENSSAGENS.DEFAULT_HEADER.items = idioma
+
+                        return MENSSAGENS.DEFAULT_HEADER//200
+                    } else {
+                        return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL
+                    }
+
+
+                } else {
+                    return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL
+                }
+            } else {
+                return validar//500
+            }
+        } else {
+            return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL
         }
+
+    } catch (error) {
+        return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
-    else if (idioma.familia_linguistica.length > 50 || idioma.familia_linguistica == '' || idioma.familia_linguistica == undefined || idioma.familia_linguistica == null) {
-        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Familia linguistica incorreta]'
-        return MENSSAGES.ERROR_REQUIRED_FIELDS
+}
+
+const atualizarIdioma = async (idioma, id, contentType) => {
+    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
+
+    try {
+       
+       
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+    
+           let atualizar = true
+            const validar = await validarIdioma(idioma,atualizar)
+            console.log(validar)
+         
+            if (!validar) {
+                 
+                
+                let validarId = await buscarIdiomasId(id)
+
+                if(validarId.status_code == 200){
+                
+                    idioma.id = Number(id)
+
+                    let resulIdioma =  await idiomaDAO.setUpdateIdioma(idioma)
+                    if(resulIdioma){
+                        
+                        MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_UPDATE_ITEM.status
+                        MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_UPDATE_ITEM.status_code
+                        MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_UPDATE_ITEM.message
+                        MENSSAGENS.DEFAULT_HEADER.items.idioma = idioma
+
+                        return MENSSAGENS.DEFAULT_HEADER
+                    }else{
+                        return MENSSAGENS.ERROR_INTERNAL_SERVER_MODEL
+                    }
+
+                }else{
+                    return validarId
+                }
+
+            } else {
+                return validar
+            }
+
+        }
+        else {
+            return MENSSAGENS.ERROR_CONTENT_TYPE
+        }
+
+    } catch (error) {
+        console.log(error)
+        return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
-   
+}
+
+const validarIdioma = async (idioma,atualizar) => {
+    console.log(atualizar)
+    let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
+    //Validação da sigla
+    if (idioma.sigla == '' || idioma.sigla == undefined || idioma.sigla == null || idioma.sigla.length > 10) {
+        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += '[Sigla incorreto]'
+        return MENSSAGENS.ERROR_REQUIRED_FIELDS
+    }
+     if ( idioma.data_criacao == undefined || idioma.data_criacao == '' || idioma.data_criacao == null||idioma.data_criacao.length != 10) {
+        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += '[Data de criação incorreta]'
+        return MENSSAGENS.ERROR_REQUIRED_FIELDS
+    }
+    if (idioma.familia_linguistica == undefined || idioma.familia_linguistica == null || idioma.familia_linguistica == ''|| idioma.familia_linguistica.length > 50 ) {
+        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += '[Familia linguistica incorreta]'
+        return MENSSAGENS.ERROR_REQUIRED_FIELDS
+    }
+    //Validando se a chave descricao foi envida na requisição ou dentro do objeto idioma
+    if ('descricao' in idioma || atualizar) {
+        //Validando a descricao enviada
+        if (idioma.descricao == undefined || idioma.descricao == null || idioma.descricao == ''||idioma.descricao.length > 500 ) {
+            MENSSAGENS.ERROR_REQUIRED_FIELDS.message += '[Descrição incorreta]'
+            return MENSSAGENS.ERROR_REQUIRED_FIELDS
+        }
+
+    }
+    
+     if ('antes_de_cristo' in idioma || atualizar) {
+
+        if (idioma.antes_de_cristo == true || idioma.antes_de_cristo == 1 || String(idioma.antes_de_cristo).toLowerCase() == "true")
+            idioma.antes_de_cristo = 1;
+
+        else if (idioma.antes_de_cristo == false || idioma.antes_de_cristo == 0 ||String(idioma.antes_de_cristo).toLowerCase() == "false")
+            idioma.antes_de_cristo = 0;
+
+
+        else {
+            MENSSAGENS.ERROR_REQUIRED_FIELDS.message += '[antes_de_cristo incorreto]'
+            return MENSSAGENS.ERROR_REQUIRED_FIELDS
+        }
+
+    }
+
+
+
+
     else {
-    return false
+        return false
+    }
 }
-}
+
 
 module.exports = {
     listarIdiomas,
     buscarIdiomasId,
     excluirIdioma,
-    inserirIdioma
+    inserirIdioma,
+    atualizarIdioma
 }

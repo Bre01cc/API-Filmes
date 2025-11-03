@@ -162,7 +162,6 @@ const atualizarGenero = async (genero, id, contentType) => {
             return MENSSAGES.ERROR_CONTENT_TYPE//415
         }
     } catch (error) {
-        console.log(error)
         return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
@@ -173,16 +172,16 @@ const validarGenero = (genero) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     //Validação do nome
-    if (genero.nome == '' || genero.nome == undefined || genero.nome == null || genero.nome.length > 100) {
+    if ( genero.nome == undefined || genero.nome == null || genero.nome == '' || genero.nome.length > 100) {
         MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome incorreto]'
         return MENSSAGES.ERROR_REQUIRED_FIELDS
     }
     //Validação da descrição
-    else if (genero.descricao == '' || genero.descricao == undefined || genero.descricao == null || genero.descricao.length > 500) {
+    else if (genero.descricao == undefined || genero.descricao == null ||genero.descricao == '' || genero.descricao.length > 500) {
         MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Descrição incorreta]'
         return MENSSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (genero.data_criacao == '' || genero.data_criacao.length != 10) {
+    } else if ( genero.data_criacao == undefined|| genero.data_criacao ==null|| genero.data_criacao == '' || genero.data_criacao.length != 10) {
         MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Data de criação incorreta]'
         return MENSSAGES.ERROR_REQUIRED_FIELDS
     }

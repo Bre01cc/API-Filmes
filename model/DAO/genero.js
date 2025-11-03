@@ -35,7 +35,6 @@ const getSelectAllGenero = async () => {
 
 
     } catch (error) {
-        // console.log(error)
         return false
 
     }
@@ -60,7 +59,6 @@ const getSelectByGenero = async (id) => {
 
 
     } catch (error) {
-        // console.log(error)
         return false
 
     }
@@ -114,6 +112,7 @@ const setUpdateGenero = async (genero) =>{
         where id_genero = ${genero.id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
+
         if (result) {
             return true
         } else {
@@ -138,7 +137,6 @@ const setDeleteGenero = async (id) => {
     }
 
     catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -152,6 +150,3 @@ module.exports = {
     setUpdateGenero,
     setDeleteGenero
 }
-
-
-

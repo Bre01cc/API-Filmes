@@ -180,7 +180,6 @@ const atualizarFilme = async (filme, id, contentType) => {
             return MENSSAGENS.ERROR_CONTENT_TYPE//415
         }
     } catch (error) {
-        console.log(error)
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
