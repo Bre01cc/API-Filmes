@@ -12,13 +12,13 @@ const controllerNacionalidade = require('../controller/nacionalidade/controller_
 
 
 
-router.get('/v1/locador/nacionalidade', cors(), async function (request, response) {
+router.get('/v1/locadora/nacionalidade', cors(), async function (request, response) {
     let nacionalidade = await controllerNacionalidade.listarNacionalidade()
     response.status(nacionalidade.status_code)
     response.json(nacionalidade)
 })
 
-router.get('/v1/locador/nacionalidade/:id', cors(), async function (request, response) {
+router.get('/v1/locadora/nacionalidade/:id', cors(), async function (request, response) {
 
     let nacionalidadeID = request.params.id
     let nacionalidade = await controllerNacionalidade.buscarNacionalidadeID(nacionalidadeID)
@@ -26,7 +26,7 @@ router.get('/v1/locador/nacionalidade/:id', cors(), async function (request, res
     response.json(nacionalidade)
 })
 
-router.delete('/v1/locador/nacionalidade/:id', cors(), async function (request, response) {
+router.delete('/v1/locadora/nacionalidade/:id', cors(), async function (request, response) {
 
     let nacionalidadeID = request.params.id
     let nacionalidade = await controllerNacionalidade.deletarNacionalidadeId(nacionalidadeID)
@@ -34,7 +34,7 @@ router.delete('/v1/locador/nacionalidade/:id', cors(), async function (request, 
     response.json(nacionalidade)
 })
 
-router.post('/v1/locador/nacionalidade', cors(), bodyParserJSON, async function (request, response) {
+router.post('/v1/locadora/nacionalidade', cors(), bodyParserJSON, async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
     //Recebe o tipo de dado da requisição (JSON,XML ou ...)
@@ -45,7 +45,7 @@ router.post('/v1/locador/nacionalidade', cors(), bodyParserJSON, async function 
     response.json(nacionalidade)
 })
 
-router.put('/v1/locador/nacionalidade/:id', bodyParserJSON, cors(), async function (request, response) {
+router.put('/v1/locadora/nacionalidade/:id', bodyParserJSON, cors(), async function (request, response) {
     
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body

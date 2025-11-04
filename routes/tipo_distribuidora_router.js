@@ -13,13 +13,13 @@ const controllerTipoDistribuidora = require('../controller/tipo_distribuidora/ti
 
 
 
-router.get('/v1/locador/tipoDistribuidora', cors(), async function (request, response) {
+router.get('/v1/locadora/tipoDistribuidora', cors(), async function (request, response) {
     let  tipoDistribuidora = await controllerTipoDistribuidora.listarTipoDistribuidora()
     response.status(tipoDistribuidora.status_code)
     response.json(tipoDistribuidora)
 })
 
-router.get('/v1/locador/tipoDistribuidora/:id', cors(), async function (request, response) {
+router.get('/v1/locadora/tipoDistribuidora/:id', cors(), async function (request, response) {
 
     let tipoDistribuidoraID = request.params.id
     let tipoDistribuidora = await controllerTipoDistribuidora.buscarTipoDistribuidoraID(tipoDistribuidoraID)
@@ -27,7 +27,7 @@ router.get('/v1/locador/tipoDistribuidora/:id', cors(), async function (request,
     response.json(tipoDistribuidora)
 })
 
-router.delete('/v1/locador/tipoDistribuidora/:id', cors(), async function (request, response) {
+router.delete('/v1/locadora/tipoDistribuidora/:id', cors(), async function (request, response) {
 
     let tipoDistribuidoraID = request.params.id
     let tipoDistribuidora = await controllerTipoDistribuidora.deletarTipoDistribuidoraId(tipoDistribuidoraID)
@@ -35,7 +35,7 @@ router.delete('/v1/locador/tipoDistribuidora/:id', cors(), async function (reque
     response.json(tipoDistribuidora)
 })
 
-router.post('/v1/locador/tipoDistribuidora', cors(), bodyParserJSON, async function (request, response) {
+router.post('/v1/locadora/tipoDistribuidora', cors(), bodyParserJSON, async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
     //Recebe o tipo de dado da requisição (JSON,XML ou ...)
@@ -46,7 +46,7 @@ router.post('/v1/locador/tipoDistribuidora', cors(), bodyParserJSON, async funct
     response.json(tipoDistribuidora)
 })
 
-router.put('/v1/locador/tipoDistribuidora/:id', bodyParserJSON, cors(), async function (request, response) {
+router.put('/v1/locadora/tipoDistribuidora/:id', bodyParserJSON, cors(), async function (request, response) {
     
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body

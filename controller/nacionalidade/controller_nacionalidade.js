@@ -190,7 +190,7 @@ const validarNacionalidade = async (nacionalidade) => {
         MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Sigla incorreto]"
         return MENSSAGENS.ERROR_REQUIRED_FIELDS
     }
-    else if (nacionalidade.data_criacao == undefined || nacionalidade.data_criacao == null || nacionalidade.data_criacao == "" || nacionalidade.data_criacao.length != 10) {
+    else if (nacionalidade.data_criacao == undefined || nacionalidade.data_criacao.length != 10) {
 
         MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Data de cração incorreta]"
         return MENSSAGENS.ERROR_REQUIRED_FIELDS

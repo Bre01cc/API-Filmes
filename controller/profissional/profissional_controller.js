@@ -1,4 +1,14 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de profissional
+ * Data: 04/11/2025
+ * Autot: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
+
+
+
 const profissionalDAO = require('../../model/DAO/profissional.js')
+const { atualizarIdioma } = require('../idioma/controller_Idioma.js')
 const DEFAULT_MENSAGENS = require('../modulo/config_menssages.js')
 
 const listarProfissional = async () => {
@@ -27,20 +37,20 @@ const listarProfissional = async () => {
     }
 }
 
-const buscarTipoDistribuidoraID = async (id) => {
+const buscarProfissionalID = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
     try {
         if (!isNaN(id) && id != null && id > 0) {
 
-            let resultTipoDistribuidora = await tipoDistribuidoraDAO.getSelectBytipoDistribuidora(id)
-            if (resultTipoDistribuidora) {
+            let resultProfissional = await profissionalDAO.getSelectByprofissional(id)
+            if (resultProfissional) {
 
-                if (resultTipoDistribuidora.length > 0) {
+                if (resultProfissional.length > 0) {
 
                     MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
                     MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
-                    MENSAGENS.DEFAULT_HEADER.items.tipoDistribuidora = resultTipoDistribuidora
+                    MENSAGENS.DEFAULT_HEADER.items.profissional = resultProfissional
 
                     return MENSAGENS.DEFAULT_HEADER
                 } else {
@@ -60,13 +70,13 @@ const buscarTipoDistribuidoraID = async (id) => {
     }
 }
 
-const deletarTipoDistribuidoraId = async (id) => {
+const deletarProfissionalId = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
     try {
-        let validarId = await buscarTipoDistribuidoraID(id)
+        let validarId = await buscarProfissionalID(id)
         if (validarId.status_code == 200) {
 
-            let deletarTipoDistribuidora = await tipoDistribuidoraDAO.setDeletetipoDistribuidora(id)
+            let deletarProfissional = await profissionalDAO.setDeleteprofissional(id)
             MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
             MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
             MENSAGENS.DEFAULT_HEADER.message = MENSAGENS.SUCCESS_DELETE.message
@@ -81,26 +91,26 @@ const deletarTipoDistribuidoraId = async (id) => {
     }
 }
 
-const inserirTipoDistribuidora = async (tipoDistribuidora, contentType) => {
+const inserirProfissional = async (profissional, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            let validar = await validarTipoDistribuidora(tipoDistribuidora);
+            let validar = await validarProfissional(profissional);
 
             if (!validar) {
 
-                let resultTipoDistribuidora = await tipoDistribuidoraDAO.setTipoDistribuidora(tipoDistribuidora)
-                if (resultTipoDistribuidora) {
-                    let ultimoId = await tipoDistribuidoraDAO.getSelectLastIdtipoDistribuidora()
+                let resultProfissional = await profissionalDAO.setProfissional(profissional)
+                if (resultProfissional) {
+                    let ultimoId = await profissionalDAO.getSelectLastIdProfissional()
 
                     if (ultimoId) {
-                        tipoDistribuidora.id = ultimoId
+                        profissional.id = ultimoId
                         MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_CREATED_ITEM.status
                         MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_CREATED_ITEM.status_code
                         MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_CREATED_ITEM.message
-                        MENSSAGENS.DEFAULT_HEADER.items = tipoDistribuidora
+                        MENSSAGENS.DEFAULT_HEADER.items = profissional
 
                         return MENSSAGENS.DEFAULT_HEADER//200
                     } else {
@@ -124,7 +134,7 @@ const inserirTipoDistribuidora = async (tipoDistribuidora, contentType) => {
 }
 
 
-const atualizarTipoDistribuidora = async (tipoDistribuidora, id, contentType) => {
+const atualizarProfissional = async (profissional,id, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
     try {
@@ -132,24 +142,25 @@ const atualizarTipoDistribuidora = async (tipoDistribuidora, id, contentType) =>
 
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            const validar = await validarTipoDistribuidora(tipoDistribuidora)
+            let atualizar = true
+            const validar = await validarProfissional(profissional,atualizar)
 
             if (!validar) {
 
 
-                let validarId = await buscarTipoDistribuidoraID(id)
+                let validarId = await buscarProfissionalID(id)
 
                 if (validarId.status_code == 200) {
 
-                    tipoDistribuidora.id = Number(id)
+                    profissional.id = Number(id)
 
-                    let resultTipoDistribuidora = await tipoDistribuidoraDAO.setUpdatetipoDistribuidora(tipoDistribuidora)
-                    if (resultTipoDistribuidora) {
+                    let resultProfissional = await profissionalDAO.setUpdateProfissional(profissional)
+                    if (resultProfissional) {
 
                         MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_UPDATE_ITEM.status
                         MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_UPDATE_ITEM.status_code
                         MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_UPDATE_ITEM.message
-                        MENSSAGENS.DEFAULT_HEADER.items.tipoDistribuidora = tipoDistribuidora
+                        MENSSAGENS.DEFAULT_HEADER.items.profissional = profissional
 
                         return MENSSAGENS.DEFAULT_HEADER
                     } else {
@@ -170,22 +181,59 @@ const atualizarTipoDistribuidora = async (tipoDistribuidora, id, contentType) =>
         }
 
     } catch (error) {
+  
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
 
-const validarTipoDistribuidora= async (tipoDistribuidora) => {
+const validarProfissional = async (profissional, atualizar) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
-    if (tipoDistribuidora.nome == undefined || tipoDistribuidora.nome == null || tipoDistribuidora.nome == "" || tipoDistribuidora.nome.length > 100) {
+    if (profissional.nome == undefined || profissional.nome == null || profissional.nome == "" || profissional.nome.length > 100) {
 
         MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Nome incorreto]"
         return MENSSAGENS.ERROR_REQUIRED_FIELDS
     }
-    else if (tipoDistribuidora.descricao == undefined || tipoDistribuidora.descricao == null || tipoDistribuidora.descricao == "" || tipoDistribuidora.descricao.length > 500) {
 
-        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Descrição incorreta]"
+    if (profissional.nome_artistico == undefined || profissional.nome_artistico == null || profissional.nome_artistico == "" || profissional.nome_artistico.length > 500) {
+
+        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Nome artístico incorreto]"
         return MENSSAGENS.ERROR_REQUIRED_FIELDS
+    }
+
+    if (profissional.data_nascimento == undefined || profissional.data_nascimento.length !=10) {
+        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Data de nascimento incorreta]"
+        return MENSSAGENS.ERROR_REQUIRED_FIELDS
+    }
+
+    if ('data_falecimento' in profissional || atualizar) {
+
+        if (profissional.data_falecimento == undefined || profissional.data_falecimento.length >10) {  
+            MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Data de falecimento incorreta]"
+            return MENSSAGENS.ERROR_REQUIRED_FIELDS
+        }
+
+    }
+
+    if (profissional.foto == undefined || profissional.foto == null || profissional.foto == "" || profissional.foto.length > 100) {
+        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Foto incorreta]"
+        return MENSSAGENS.ERROR_REQUIRED_FIELDS
+    }
+
+    if (profissional.sexo == undefined || profissional.sexo == null || profissional.sexo == "" || profissional.sexo.length > 1 ) {
+        MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Sexo incorreto]"
+        return MENSSAGENS.ERROR_REQUIRED_FIELDS
+    }
+
+    if ('rede_social' in profissional || atualizar) {
+        if (profissional.rede_social == "" || profissional.rede_social == undefined || profissional.rede_social.length > 20) {
+            MENSSAGENS.ERROR_REQUIRED_FIELDS =+ "[Rede social incorreta]"
+            return MENSSAGENS.ERROR_REQUIRED_FIELDS
+        }
+    }
+
+    if(profissional.biografia == undefined || profissional.biografia ==null || profissional.biografia ==""||profissional.biografia.length>500){
+        MENSSAGENS.ERROR_REQUIRED_FIELDS =+ "[Biografia incorreta]"
     }
 
     else {
@@ -193,6 +241,10 @@ const validarTipoDistribuidora= async (tipoDistribuidora) => {
     }
 }
 
-module.exports ={
-listarProfissional
+module.exports = {
+    listarProfissional,
+    buscarProfissionalID,
+    deletarProfissionalId,
+    inserirProfissional,
+    atualizarProfissional
 }

@@ -87,7 +87,6 @@ const setNacionalidade = async (nacionalidade) => {
              '${nacionalidade.data_criacao}'
             ); `
 
-        console.log(sql)
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (result)

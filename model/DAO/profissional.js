@@ -49,27 +49,27 @@ const getSelectByprofissional = async (id) => {
 }
 
 const setDeleteprofissional = async (id) => {
-    
-    try {
-      let sql = `delete from tbl_profissional where id_profissional = ${id}`
 
-      let result = await prisma.$queryRawUnsafe(sql)
-      if(result)
-        return true
-    else 
-        return false
+    try {
+        let sql = `delete from tbl_profissional where id_profissional = ${id}`
+
+        let result = await prisma.$queryRawUnsafe(sql)
+        if (result)
+            return true
+        else
+            return false
 
     } catch (error) {
         return false
     }
 }
 
-const getSelectLastIdtipoDistribuidora = async () => {
+const getSelectLastIdProfissional = async () => {
     try {
-        let sql = `select id_tipo_distribuidora from tbl_tipo_distribuidora order by id_tipo_distribuidora desc limit 1;`
+        let sql = `select id_profissional from tbl_profissional order by id_profissional desc limit 1;`
         let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
-            return Number(result[0].id_tipo_distribuidora)
+            return Number(result[0].id_profissional)
         } else {
             return false
         }
@@ -79,14 +79,20 @@ const getSelectLastIdtipoDistribuidora = async () => {
     }
 }
 
-const setUpdatetipoDistribuidora = async (tipoDistribuidora) => {
+const setUpdateProfissional = async (profissional) => {
 
     try {
 
-        let sql = `Update tbl_tipo_distribuidora
-             set nome ='${tipoDistribuidora.nome}',
-             descricao ='${tipoDistribuidora.descricao}'
-             where id_tipo_distribuidora = ${tipoDistribuidora.id};`
+        let sql = `Update tbl_profissional
+             set nome ='${profissional.nome}',
+             data_nascimento ='${profissional.data_nascimento}',
+             nome_artistico ='${profissional.nome_artistico}',
+             foto = '${profissional.foto}',
+             data_falecimento ='${profissional.data_falecimento}',
+             rede_social = '${profissional.rede_social}',
+             biografia ='${profissional.biografia}',
+             sexo ='${profissional.sexo}'
+             where id_profissional = ${profissional.id};`
 
 
         let result = await prisma.$queryRawUnsafe(sql)
@@ -101,17 +107,63 @@ const setUpdatetipoDistribuidora = async (tipoDistribuidora) => {
     }
 }
 
-const setTipoDistribuidora = async (tipoDistribuidora) => {
+const setProfissional = async (profissional) => {
 
     try {
 
+        let sql = ''
 
-        let sql = `insert into tbl_tipo_distribuidora(nome,descricao)
+        if ('data_falecimento' in profissional && 'rede_social' in profissional) {
+            sql = `insert into tbl_profissional(nome,data_nascimento,nome_artistico,foto,data_falecimento,rede_social,biografia,sexo)
             values(
-             '${tipoDistribuidora.nome}',
-             '${tipoDistribuidora.descricao}'
+             '${profissional.nome}',
+             '${profissional.data_nascimento}',
+             '${profissional.nome_artistico}',
+             '${profissional.foto}',
+             '${profissional.data_falecimento}',
+             '${profissional.rede_social}',
+             '${profissional.biografia}',
+             '${profissional.sexo}'
             ); `
+        }
+         if ('data_falecimento' in profissional && !('rede_social' in profissional)) {
+            sql = `insert into tbl_profissional(nome,data_nascimento,nome_artistico,foto,data_falecimento,biografia,sexo)
+            values(
+             '${profissional.nome}',
+             '${profissional.data_nascimento}',
+             '${profissional.nome_artistico}',
+             '${profissional.foto}',
+             '${profissional.data_falecimento}',
+             '${profissional.biografia}',
+             '${profissional.sexo}'
 
+            ); `
+        }
+        if ('rede_social' in profissional && !('data_falecimento' in profissional)) {
+            sql = `insert into tbl_profissional(nome,data_nascimento,nome_artistico,foto,biografia,sexo,rede_social)
+            values(
+             '${profissional.nome}',
+             '${profissional.data_nascimento}',
+             '${profissional.nome_artistico}',
+             '${profissional.foto}',
+             '${profissional.biografia}',
+             '${profissional.sexo}',
+             '${profissional.rede_social}'
+            ); `
+        }
+        else {
+            sql = `insert into tbl_profissional(nome,data_nascimento,nome_artistico,foto,biografia,sexo)
+            values(
+             '${profissional.nome}',
+             '${profissional.data_nascimento}',
+             '${profissional.nome_artistico}',
+             '${profissional.foto}',
+             '${profissional.biografia}',
+             '${profissional.sexo}'
+
+            ); `
+        }
+        console.log(sql)
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (result)
@@ -123,10 +175,15 @@ const setTipoDistribuidora = async (tipoDistribuidora) => {
         return false
     }
 }
+
+
 
 
 module.exports = {
     getSelectAllprofissional,
     getSelectByprofissional,
-    setDeleteprofissional
+    setDeleteprofissional,
+    setProfissional,
+    setUpdateProfissional
+
 }

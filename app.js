@@ -28,25 +28,24 @@ app.use((request, response, next) => {
     next()
 })
 
-const controllerProfissional = require('./controller/profissional/profissional_controller.js')
+
 
 const idiomasRotas = require('./routes/idioma_router.js')
 const filmesRotas = require('./routes/filme_router.js')
 const generoRotas = require('./routes/genero_router.js')
 const nacionalidadeRotas = require('./routes/nacionalidade_router.js')
 const tipoDistribuidoraRotas = require('./routes/tipo_distribuidora_router.js')
+const profissionalRotas = require('./routes/profissional_router.js')
 
-app.get('/v1/locador/profissional', cors(), async function (request, response) {
-    let  profissional = await controllerTipoDistribuidora.listarTipoDistribuidora()
-    response.status(tipoDistribuidora.status_code)
-    response.json(tipoDistribuidora)
-})
+
+
 
 app.use(filmesRotas)
 app.use(generoRotas)
 app.use(idiomasRotas)
 app.use(nacionalidadeRotas)
 app.use(tipoDistribuidoraRotas)
+app.use(profissionalRotas)
 app.listen(PORT, function () {
     console.log('API aguardando requisições.....')
 })

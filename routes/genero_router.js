@@ -11,20 +11,20 @@ const controllerGenero = require('../controller/genero/controller_genero.js')
 
 
 
-router.get('/v1/locador/generos', cors(), async function (request, response) {
+router.get('/v1/locadora/generos', cors(), async function (request, response) {
     let genero = await controllerGenero.listarGenero()
     response.status(genero.status_code)
     response.json(genero)
 })
 
-router.get('/v1/locador/genero/:id', cors(), async function (request, response) {
+router.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
     let idGenero = request.params.id
     let genero = await controllerGenero.buscarGeneroId(idGenero)
     response.status(genero.status_code)
     response.json(genero)
 })
 
-router.post('/v1/locador/genero', cors(), bodyParserJSON, async function (request, response) {
+router.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request, response) {
 
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
@@ -39,7 +39,7 @@ router.post('/v1/locador/genero', cors(), bodyParserJSON, async function (reques
 
 })
 
-router.put('/v1/locador/genero/:id', bodyParserJSON, cors(), async function (request, response) {
+router.put('/v1/locadora/genero/:id', bodyParserJSON, cors(), async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
     //Recebe o tipo de dado da requisição (JSON,XML ou ...)
@@ -51,7 +51,7 @@ router.put('/v1/locador/genero/:id', bodyParserJSON, cors(), async function (req
     response.json(genero)
 })
 
-router.delete('/v1/locador/genero/:id', cors(), async function (request, response) {
+router.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
     let idGenero = request.params.id;
     let genero = await controllerGenero.excluirGenero(idGenero)
     response.status(genero.status_code)
