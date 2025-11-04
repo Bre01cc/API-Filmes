@@ -1,4 +1,3 @@
-
 CREATE DATABASE db_locadora_filme_ds2m_25_2;
 USE db_locadora_filme_ds2m_25_2;
 

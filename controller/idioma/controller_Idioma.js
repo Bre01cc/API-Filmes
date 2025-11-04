@@ -191,7 +191,7 @@ const atualizarIdioma = async (idioma, id, contentType) => {
 }
 
 const validarIdioma = async (idioma,atualizar) => {
-    console.log(atualizar)
+    
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     //Validação da sigla
     if (idioma.sigla == '' || idioma.sigla == undefined || idioma.sigla == null || idioma.sigla.length > 10) {

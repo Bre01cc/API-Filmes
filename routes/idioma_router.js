@@ -9,7 +9,7 @@ const bodyParserJSON = bodyParser.json()
 
 const controllerIdioma = require('../controller/idioma/controller_Idioma.js')
 
-router.get('/v1/locador/idiomas', cors(), async function (request, response) {
+router.get('/v1/locador/idioma', cors(), async function (request, response) {
     let idioma = await controllerIdioma.listarIdiomas()
     response.status(idioma.status_code)
     response.json(idioma)
@@ -21,7 +21,7 @@ router.get('/v1/locador/idioma/:id', cors(), async function (request, response) 
     response.status(idioma.status_code)
     response.json(idioma)
 })
-router.post('/v1/locador/adicionar/idioma', cors(), bodyParserJSON, async function (request, response) {
+router.post('/v1/locador/idioma', cors(), bodyParserJSON, async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
     //Recebe o tipo de dado da requisição (JSON,XML ou ...)
@@ -40,7 +40,7 @@ router.delete('/v1/locador/idioma/:id', cors(), async function (request, respons
     response.json(idioma)
 })
 
-router.put('/v1/locador/atualizar/idioma/:id', bodyParserJSON, cors(), async function (request, response) {
+router.put('/v1/locador/idioma/:id', bodyParserJSON, cors(), async function (request, response) {
     
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
@@ -51,3 +51,5 @@ router.put('/v1/locador/atualizar/idioma/:id', bodyParserJSON, cors(), async fun
     response.status(idioma.status_code)
     response.json(idioma)
 })
+
+module.exports = router;

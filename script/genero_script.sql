@@ -1,4 +1,3 @@
-
 -- Criação da tabela
 CREATE TABLE tbl_genero (
     id_genero INT PRIMARY KEY auto_increment,

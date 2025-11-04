@@ -9,7 +9,7 @@ const bodyParserJSON = bodyParser.json()
 
 const controllerFilme = require('../controller/filme/controller_filme.js')
 
-router.get('/v1/locador/filmes', cors(), async function (request, response) {
+router.get('/v1/locador/filme', cors(), async function (request, response) {
     let filme = await controllerFilme.listarFilmes()
     response.status(filme.status_code)
     response.json(filme)
@@ -21,7 +21,7 @@ router.get('/v1/locador/filme/:id', cors(), async function (request, response) {
     response.status(filme.status_code)
     response.json(filme)
 })
-router.post('/v1/locador/adicionar/filme', cors(), bodyParserJSON, async function (request, response) {
+router.post('/v1/locador/filme', cors(), bodyParserJSON, async function (request, response) {
 
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
@@ -35,7 +35,7 @@ router.post('/v1/locador/adicionar/filme', cors(), bodyParserJSON, async functio
     response.json(filme)
 
 })
-router.put('/v1/locador/atualizar/filme/:id', bodyParserJSON, cors(), async function (request, response) {
+router.put('/v1/locador/filme/:id', bodyParserJSON, cors(), async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
     //Recebe o tipo de dado da requisição (JSON,XML ou ...)
@@ -46,7 +46,7 @@ router.put('/v1/locador/atualizar/filme/:id', bodyParserJSON, cors(), async func
     response.status(filme.status_code)
     response.json(filme)
 })
-router.delete('/v1/locador/deletar/filme/:id', cors(), async function (request, response) {
+router.delete('/v1/locador/filme/:id', cors(), async function (request, response) {
     let idFilme = request.params.id;
     let filme = await controllerFilme.excluirFilme(idFilme)
     response.status(filme.status_code)
