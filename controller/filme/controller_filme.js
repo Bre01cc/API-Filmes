@@ -2,11 +2,14 @@
  * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de Filmes
  * Data: 01/10/2025
  * Autor: Breno Oliveira Assis Reis
- * Versão: 1.0
+ * Versão: 1.0 (CRUD básico do filme, sem as relações com outras tabelas)
+ * Versão: 1.1 (CRUD do filme com relacionamento com tabela genero)
  ***********************************************************************************************************************/
 
 //Imports
 const filmeDAO = require('../../model/DAO/filme.js')
+//Importe
+const ControllerFilmeGenero = require('./controller_filme_genero.js')
 const DEFAULT_MENSSAGENS = require('../modulo/config_menssages.js')
 
 //Retorna uma lista de todos os filmes
@@ -102,6 +105,11 @@ const inserirFilme = async (filme, contentType) => {
                     //Chama a  função para receber o ID gerado no BD
                     let lastID = await filmeDAO.getSelectLastId();
                     if (lastID) {
+
+                        filme.genero.forEach( async function(genero){
+                                let filmeGenero ={id_filme: lastID,id_genero: genero.id}
+                                let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero)
+                        });
                         //Adiciona o ID no JSON com os dados do filme
                         filme.id = lastID
                         MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_CREATED_ITEM.status
