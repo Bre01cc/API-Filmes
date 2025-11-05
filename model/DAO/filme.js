@@ -1,7 +1,7 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao filme
  * Data: 01/10/2025
- * Autot: Breno Oliveira Assis Reis
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
 

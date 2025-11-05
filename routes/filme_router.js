@@ -1,3 +1,10 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pelas rotas referente ao filme
+ * Data: 03/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
+
 const express = require('express');
 const router = express.Router();
 
@@ -7,20 +14,25 @@ const bodyParser = require('body-parser')//Responsável por gerenciar a chegada 
 //Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
 const bodyParserJSON = bodyParser.json()
 
+//Import
 const controllerFilme = require('../controller/filme/controller_filme.js')
 
+//Responsável por devolver todos os filmes 
 router.get('/v1/locadora/filme', cors(), async function (request, response) {
     let filme = await controllerFilme.listarFilmes()
     response.status(filme.status_code)
     response.json(filme)
 })
 
+//Responsável por devolver um filme pelo id
 router.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     let idFilme = request.params.id
     let filme = await controllerFilme.buscarFilmesId(idFilme)
     response.status(filme.status_code)
     response.json(filme)
 })
+
+//Responsável cadastrar um novo filme
 router.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (request, response) {
 
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
@@ -35,6 +47,8 @@ router.post('/v1/locadora/filme', cors(), bodyParserJSON, async function (reques
     response.json(filme)
 
 })
+
+//Responsável por atualizar um filme
 router.put('/v1/locadora/filme/:id', bodyParserJSON, cors(), async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
@@ -46,6 +60,8 @@ router.put('/v1/locadora/filme/:id', bodyParserJSON, cors(), async function (req
     response.status(filme.status_code)
     response.json(filme)
 })
+
+//Responsável por deletar um filme
 router.delete('/v1/locadora/filme/:id', cors(), async function (request, response) {
     let idFilme = request.params.id;
     let filme = await controllerFilme.excluirFilme(idFilme)
@@ -53,5 +69,5 @@ router.delete('/v1/locadora/filme/:id', cors(), async function (request, respons
     response.json(filme)
 })
 
-
+//Exporte da router
 module.exports = router;

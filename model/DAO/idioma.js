@@ -1,12 +1,9 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao idioma
  * Data: 22/10/2025
- * Autot: Breno Oliveira Assis Reis
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
-
-
-
 
 //Import da dependencia do Prisma que permite a execução de script SQL no BD
 const { PrismaClient } = require('../../generated/prisma')
@@ -40,7 +37,7 @@ const getSelectAllIdioma = async () => {
     }
 }
 
-//Busca o idioma pelo id
+//Busca o idioma pelo id no banco de dados
 const getSelectByIdioma = async (id) => {
     try {
         let sql = `select * from tbl_idioma where id_idioma =${id}`
@@ -56,6 +53,7 @@ const getSelectByIdioma = async (id) => {
     }
 }
 
+//Inseri um idioma 
 const setIdioma = async (idioma) => {
 
     try {
@@ -114,6 +112,7 @@ const setIdioma = async (idioma) => {
     }
 }
 
+//Atualiza um idioma 
 const setUpdateIdioma = async(idioma)=>{
 
     try {
@@ -155,6 +154,7 @@ const setDeleteIdioma = async (id) => {
     }
 }
 
+//Busca o ultimo id 
 const getSelectLastIdIdioma = async () => {
     try {
         let sql = `select id_idioma from tbl_idioma order by id_idioma desc limit 1;`
@@ -170,7 +170,7 @@ const getSelectLastIdIdioma = async () => {
     }
 }
 
-
+//Exportes das funções
 module.exports = {
     getSelectAllIdioma,
     setDeleteIdioma,

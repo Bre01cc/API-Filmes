@@ -1,3 +1,9 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pelas rotas referente ao tipo de distribuidora
+ * Data: 03/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
 
 const express = require('express');
 const router = express.Router();
@@ -8,17 +14,19 @@ const bodyParser = require('body-parser')//Responsável por gerenciar a chegada 
 //Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
 const bodyParserJSON = bodyParser.json()
 
+//Import
 const controllerTipoDistribuidora = require('../controller/tipo_distribuidora/tipo_distribuidora_controller.js')
 
 
 
-
+//Resposável por devolver todos tipos de distrubuidoras
 router.get('/v1/locadora/tipoDistribuidora', cors(), async function (request, response) {
     let  tipoDistribuidora = await controllerTipoDistribuidora.listarTipoDistribuidora()
     response.status(tipoDistribuidora.status_code)
     response.json(tipoDistribuidora)
 })
 
+//Responsável por devolver um tipo de distribuidora pelo id
 router.get('/v1/locadora/tipoDistribuidora/:id', cors(), async function (request, response) {
 
     let tipoDistribuidoraID = request.params.id
@@ -27,6 +35,7 @@ router.get('/v1/locadora/tipoDistribuidora/:id', cors(), async function (request
     response.json(tipoDistribuidora)
 })
 
+//Responsável por deletar um tipo de distruibuidora
 router.delete('/v1/locadora/tipoDistribuidora/:id', cors(), async function (request, response) {
 
     let tipoDistribuidoraID = request.params.id
@@ -35,6 +44,7 @@ router.delete('/v1/locadora/tipoDistribuidora/:id', cors(), async function (requ
     response.json(tipoDistribuidora)
 })
 
+//Responsável por cadastrar um novo tipo de distribuidora
 router.post('/v1/locadora/tipoDistribuidora', cors(), bodyParserJSON, async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
@@ -46,6 +56,7 @@ router.post('/v1/locadora/tipoDistribuidora', cors(), bodyParserJSON, async func
     response.json(tipoDistribuidora)
 })
 
+//Responsável por atualizar um tipo de distribuidora
 router.put('/v1/locadora/tipoDistribuidora/:id', bodyParserJSON, cors(), async function (request, response) {
     
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
@@ -58,4 +69,5 @@ router.put('/v1/locadora/tipoDistribuidora/:id', bodyParserJSON, cors(), async f
     response.json(tipoDistribuidora)
 })
 
+//Exporte do router
 module.exports = router;

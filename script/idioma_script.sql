@@ -9,10 +9,7 @@ create table tbl_idioma(
 
 alter table tbl_idioma add column antes_de_cristo BOOLEAN DEFAULT FALSE;
 
-
-
---- Inserts de dados
-
+--- Insert de idiomas
 insert into tbl_idioma(sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo)
 values
 ('es', '1492-01-01', 'O espanhol é uma língua românica originária da Península Ibérica, falada em diversos países da América Latina e na Espanha. Possui diversas variações regionais.', 'LATIM', FALSE),

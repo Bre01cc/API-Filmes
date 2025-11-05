@@ -1,12 +1,9 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao tipo de distribuidora
  * Data: 03/11/2025
- * Autot: Breno Oliveira Assis Reis
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
-
-
-
 
 //Import da dependencia do Prisma que permite a execução de script SQL no BD
 const { PrismaClient } = require('../../generated/prisma')
@@ -18,6 +15,7 @@ const prisma = new PrismaClient()
 //$queryRaw()         -> executa comandos sem uma variável e que retorna valores do banco(select)
 //executeRaw()        -> permite executar comandos sem  estar em uma variável e não retorna nenhum dados, no caso injeta dados no banco.
 
+//Busca todos tipo de distribuidoras
 const getSelectAlltipoDistribuidora = async () => {
 
     try {
@@ -36,6 +34,7 @@ const getSelectAlltipoDistribuidora = async () => {
     }
 }
 
+//Busca um tipo de distribuidora pelo id
 const getSelectBytipoDistribuidora = async (id) => {
 
     try {
@@ -52,6 +51,7 @@ const getSelectBytipoDistribuidora = async (id) => {
     }
 }
 
+//Deleta um tipo de distribuidora pelo id
 const setDeletetipoDistribuidora = async (id) => {
     
     try {
@@ -68,6 +68,7 @@ const setDeletetipoDistribuidora = async (id) => {
     }
 }
 
+//Busca o ultimo id
 const getSelectLastIdtipoDistribuidora = async () => {
     try {
         let sql = `select id_tipo_distribuidora from tbl_tipo_distribuidora order by id_tipo_distribuidora desc limit 1;`
@@ -83,6 +84,7 @@ const getSelectLastIdtipoDistribuidora = async () => {
     }
 }
 
+//Atualiza um tipo de distribuidora
 const setUpdatetipoDistribuidora = async (tipoDistribuidora) => {
 
     try {
@@ -105,6 +107,7 @@ const setUpdatetipoDistribuidora = async (tipoDistribuidora) => {
     }
 }
 
+//Inseri um novo tipo de distribuidora
 const setTipoDistribuidora = async (tipoDistribuidora) => {
 
     try {
@@ -128,6 +131,7 @@ const setTipoDistribuidora = async (tipoDistribuidora) => {
     }
 }
 
+//Exports das funções
 module.exports = {
    getSelectAlltipoDistribuidora,
    getSelectBytipoDistribuidora,

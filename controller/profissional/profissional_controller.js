@@ -1,16 +1,16 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de profissional
  * Data: 04/11/2025
- * Autot: Breno Oliveira Assis Reis
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
 
 
-
+//Imports
 const profissionalDAO = require('../../model/DAO/profissional.js')
-const { atualizarIdioma } = require('../idioma/controller_Idioma.js')
 const DEFAULT_MENSAGENS = require('../modulo/config_menssages.js')
 
+//Retorna todos os profissionais
 const listarProfissional = async () => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -37,6 +37,7 @@ const listarProfissional = async () => {
     }
 }
 
+//Retorna um profissional pelo id
 const buscarProfissionalID = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -70,6 +71,7 @@ const buscarProfissionalID = async (id) => {
     }
 }
 
+//Deleta um profissional pelo id
 const deletarProfissionalId = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
     try {
@@ -91,6 +93,7 @@ const deletarProfissionalId = async (id) => {
     }
 }
 
+//Inseri um novo profissional
 const inserirProfissional = async (profissional, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -129,12 +132,13 @@ const inserirProfissional = async (profissional, contentType) => {
         }
 
     } catch (error) {
+           console.log(error)
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
 
-
-const atualizarProfissional = async (profissional,id, contentType) => {
+//Atualiza um profissional pelo id
+const atualizarProfissional = async (profissional, id, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
     try {
@@ -143,7 +147,7 @@ const atualizarProfissional = async (profissional,id, contentType) => {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
             let atualizar = true
-            const validar = await validarProfissional(profissional,atualizar)
+            const validar = await validarProfissional(profissional, atualizar)
 
             if (!validar) {
 
@@ -181,11 +185,12 @@ const atualizarProfissional = async (profissional,id, contentType) => {
         }
 
     } catch (error) {
-  
+     
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
 
+//Validando os dados do profissional
 const validarProfissional = async (profissional, atualizar) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -201,14 +206,18 @@ const validarProfissional = async (profissional, atualizar) => {
         return MENSSAGENS.ERROR_REQUIRED_FIELDS
     }
 
-    if (profissional.data_nascimento == undefined || profissional.data_nascimento.length !=10) {
+    if (profissional.data_nascimento == undefined || profissional.data_nascimento.length != 10) {
         MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Data de nascimento incorreta]"
         return MENSSAGENS.ERROR_REQUIRED_FIELDS
     }
 
     if ('data_falecimento' in profissional || atualizar) {
 
-        if (profissional.data_falecimento == undefined || profissional.data_falecimento.length >10) {  
+        //garantindo que a data falecimento pode ser null, se não hover esse if a condicional abaixo vai cair em um erro ao tentar acessar o lenght de algo que é null
+        if (profissional.data_falecimento == null) {
+            profissional.data_falecimento = null
+        }
+        else if (profissional.data_falecimento == undefined || profissional.data_falecimento.length != 10) {
             MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Data de falecimento incorreta]"
             return MENSSAGENS.ERROR_REQUIRED_FIELDS
         }
@@ -220,20 +229,23 @@ const validarProfissional = async (profissional, atualizar) => {
         return MENSSAGENS.ERROR_REQUIRED_FIELDS
     }
 
-    if (profissional.sexo == undefined || profissional.sexo == null || profissional.sexo == "" || profissional.sexo.length > 1 ) {
+    if (profissional.sexo == undefined || profissional.sexo == null || profissional.sexo == "" || profissional.sexo.length > 1) {
         MENSSAGENS.ERROR_REQUIRED_FIELDS.message += "[Sexo incorreto]"
         return MENSSAGENS.ERROR_REQUIRED_FIELDS
     }
 
     if ('rede_social' in profissional || atualizar) {
-        if (profissional.rede_social == "" || profissional.rede_social == undefined || profissional.rede_social.length > 20) {
-            MENSSAGENS.ERROR_REQUIRED_FIELDS =+ "[Rede social incorreta]"
+        if (profissional.rede_social == null) {
+            profissional.rede_social = null
+        }
+        else if (profissional.rede_social == "" || profissional.rede_social == undefined || profissional.rede_social.length > 150) {
+            MENSSAGENS.ERROR_REQUIRED_FIELDS.message = + "[Rede social incorreta]"
             return MENSSAGENS.ERROR_REQUIRED_FIELDS
         }
     }
 
-    if(profissional.biografia == undefined || profissional.biografia ==null || profissional.biografia ==""||profissional.biografia.length>500){
-        MENSSAGENS.ERROR_REQUIRED_FIELDS =+ "[Biografia incorreta]"
+    if (profissional.biografia == undefined || profissional.biografia == null || profissional.biografia == "" || profissional.biografia.length > 500) {
+        MENSSAGENS.ERROR_REQUIRED_FIELDS = + "[Biografia incorreta]"
     }
 
     else {
@@ -241,6 +253,7 @@ const validarProfissional = async (profissional, atualizar) => {
     }
 }
 
+//Exports das funções
 module.exports = {
     listarProfissional,
     buscarProfissionalID,

@@ -1,11 +1,9 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao genero
- * Data: 22/10/2025
- * Autot: Breno Oliveira Assis Reis
+ * Data: 04/11/2025
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
-
-
 
 
 //Import da dependencia do Prisma que permite a execução de script SQL no BD

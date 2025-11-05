@@ -1,12 +1,9 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao nacionalidade
  * Data: 03/11/2025
- * Autot: Breno Oliveira Assis Reis
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
-
-
-
 
 //Import da dependencia do Prisma que permite a execução de script SQL no BD
 const { PrismaClient } = require('../../generated/prisma')
@@ -18,6 +15,7 @@ const prisma = new PrismaClient()
 //$queryRaw()         -> executa comandos sem uma variável e que retorna valores do banco(select)
 //executeRaw()        -> permite executar comandos sem  estar em uma variável e não retorna nenhum dados, no caso injeta dados no banco.
 
+//Busca todas as nacionalidades
 const getSelectAllnacionalidade = async () => {
 
     try {
@@ -36,6 +34,7 @@ const getSelectAllnacionalidade = async () => {
     }
 }
 
+//Busca um nacionalidade pelo id
 const getSelectByNacionalidade = async (id) => {
 
     try {
@@ -52,6 +51,7 @@ const getSelectByNacionalidade = async (id) => {
     }
 }
 
+//Atualiza uma nacionalidade
 const setUpdateNacionalidade = async (nacionalidade) => {
 
     try {
@@ -75,6 +75,7 @@ const setUpdateNacionalidade = async (nacionalidade) => {
     }
 }
 
+//Inseri uma nova nacionalidade
 const setNacionalidade = async (nacionalidade) => {
 
     try {
@@ -99,6 +100,7 @@ const setNacionalidade = async (nacionalidade) => {
     }
 }
 
+//Busca o ultimo id 
 const getSelectLastIdNacionalidade = async () => {
     try {
         let sql = `select id_nacionalidade from tbl_nacionalidade order by id_nacionalidade desc limit 1;`
@@ -113,6 +115,8 @@ const getSelectLastIdNacionalidade = async () => {
         return false
     }
 }
+
+//Deleta uma nacinalidade pelo id
 const setDeleteNacionalidade = async (id) => {
 
     try {
@@ -129,7 +133,7 @@ const setDeleteNacionalidade = async (id) => {
     }
 }
 
-
+//Exportes das funções
 module.exports = {
     getSelectAllnacionalidade,
     getSelectByNacionalidade,

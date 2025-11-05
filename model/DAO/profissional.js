@@ -1,7 +1,7 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao profissional
  * Data: 03/11/2025
- * Autot: Breno Oliveira Assis Reis
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
 
@@ -88,14 +88,14 @@ const setUpdateProfissional = async (profissional) => {
              data_nascimento ='${profissional.data_nascimento}',
              nome_artistico ='${profissional.nome_artistico}',
              foto = '${profissional.foto}',
-             data_falecimento ='${profissional.data_falecimento}',
-             rede_social = '${profissional.rede_social}',
+             data_falecimento =${profissional.data_falecimento ? `'${profissional.data_falecimento}'` : 'NULL'},
+             rede_social = '${profissional.rede_social ? `'${profissional.rede_social}'` : 'Null'}',
              biografia ='${profissional.biografia}',
              sexo ='${profissional.sexo}'
              where id_profissional = ${profissional.id};`
 
-
         let result = await prisma.$queryRawUnsafe(sql)
+
 
         if (result)
             return true
@@ -126,7 +126,7 @@ const setProfissional = async (profissional) => {
              '${profissional.sexo}'
             ); `
         }
-         if ('data_falecimento' in profissional && !('rede_social' in profissional)) {
+        if ('data_falecimento' in profissional && !('rede_social' in profissional)) {
             sql = `insert into tbl_profissional(nome,data_nascimento,nome_artistico,foto,data_falecimento,biografia,sexo)
             values(
              '${profissional.nome}',
@@ -163,7 +163,6 @@ const setProfissional = async (profissional) => {
 
             ); `
         }
-        console.log(sql)
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (result)
@@ -184,6 +183,7 @@ module.exports = {
     getSelectByprofissional,
     setDeleteprofissional,
     setProfissional,
-    setUpdateProfissional
+    setUpdateProfissional,
+    getSelectLastIdProfissional
 
 }

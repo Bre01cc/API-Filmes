@@ -1,3 +1,10 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pelas rotas referente ao generos
+ * Data: 03/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
+
 const express = require('express');
 const router = express.Router();
 
@@ -7,16 +14,18 @@ const bodyParser = require('body-parser')//Responsável por gerenciar a chegada 
 //Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
 const bodyParserJSON = bodyParser.json()
 
+//Import
 const controllerGenero = require('../controller/genero/controller_genero.js')
 
 
-
+//Responsável por devolver todos os generos
 router.get('/v1/locadora/generos', cors(), async function (request, response) {
     let genero = await controllerGenero.listarGenero()
     response.status(genero.status_code)
     response.json(genero)
 })
 
+//Responsável por devolver um filme pelo id
 router.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
     let idGenero = request.params.id
     let genero = await controllerGenero.buscarGeneroId(idGenero)
@@ -24,6 +33,7 @@ router.get('/v1/locadora/genero/:id', cors(), async function (request, response)
     response.json(genero)
 })
 
+//Responsável por cadastrar um novo genero
 router.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (request, response) {
 
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
@@ -39,6 +49,7 @@ router.post('/v1/locadora/genero', cors(), bodyParserJSON, async function (reque
 
 })
 
+//Responsável por atualizar um genero
 router.put('/v1/locadora/genero/:id', bodyParserJSON, cors(), async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
@@ -51,6 +62,7 @@ router.put('/v1/locadora/genero/:id', bodyParserJSON, cors(), async function (re
     response.json(genero)
 })
 
+//Responsável por deletar um genero
 router.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
     let idGenero = request.params.id;
     let genero = await controllerGenero.excluirGenero(idGenero)
@@ -58,4 +70,5 @@ router.delete('/v1/locadora/genero/:id', cors(), async function (request, respon
     response.json(genero)
 })
 
+//Exporte do router
 module.exports = router;

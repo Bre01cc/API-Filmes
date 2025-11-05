@@ -1,5 +1,11 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de generos
+ * Data: 04/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
 
-//Import da model do gênero
+//Imports
 const generoDAO = require('../../model/DAO/genero.js')
 const DEFAULT_MENSSAGES = require('../modulo/config_menssages.js')
 

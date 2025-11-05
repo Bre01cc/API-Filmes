@@ -1,7 +1,14 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de nacionalidade
+ * Data: 04/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
 
 const nacionalidadeDAO = require('../../model/DAO/nacionalidade.js')
 const DEFAULT_MENSAGENS = require('../modulo/config_menssages.js')
 
+//Retorna todas as nacionalidades
 const listarNacionalidade = async () => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -28,6 +35,7 @@ const listarNacionalidade = async () => {
     }
 }
 
+//Retorna uma nacionalidade pelo id
 const buscarNacionalidadeID = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -61,6 +69,7 @@ const buscarNacionalidadeID = async (id) => {
     }
 }
 
+//Deleta uma nacionalidade pelo id
 const deletarNacionalidadeId = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
     try {
@@ -82,6 +91,7 @@ const deletarNacionalidadeId = async (id) => {
     }
 }
 
+//Inseri uma nova nacionalidade
 const inserirNacionalidade = async (nacionalidade, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -125,7 +135,7 @@ const inserirNacionalidade = async (nacionalidade, contentType) => {
     }
 }
 
-
+//Atualiza uma nacionalidade pelo id
 const atualizarNacionalidade = async (nacionalidade, id, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -177,6 +187,7 @@ const atualizarNacionalidade = async (nacionalidade, id, contentType) => {
     }
 }
 
+//Valida os dados de nacionalidade
 const validarNacionalidade = async (nacionalidade) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -200,6 +211,7 @@ const validarNacionalidade = async (nacionalidade) => {
     }
 }
 
+//Exports das funções
 module.exports = {
     listarNacionalidade,
     buscarNacionalidadeID,

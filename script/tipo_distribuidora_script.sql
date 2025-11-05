@@ -1,9 +1,12 @@
+
+-- Criação da tabela tipo_distribuidora
 create table tbl_tipo_distribuidora(
  id_tipo_distribuidora int primary key auto_increment,
  nome Varchar(100) not null,
  descricao Varchar(500) not null
 );
 
+-- Insert de tipos de distribuidoras
 INSERT INTO tbl_tipo_distribuidora (nome, descricao)
 VALUES
 ('Global', 

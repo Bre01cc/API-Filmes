@@ -1,7 +1,17 @@
+
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de idiomas
+ * Data: 04/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
+
+//Imports
 const idiomaDAO = require('../../model/DAO/idioma.js')
 const DEFAULT_MENSSAGENS = require('../modulo/config_menssages.js')
 
 
+//Retorna todos idiomas
 const listarIdiomas = async () => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
@@ -30,7 +40,7 @@ const listarIdiomas = async () => {
     }
 }
 
-
+//Retorna um idioma pelo id
 const buscarIdiomasId = async (id) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     try {
@@ -69,6 +79,7 @@ const buscarIdiomasId = async (id) => {
 
 }
 
+//Exclui um idioma pelo id
 const excluirIdioma = async (id) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
     try {
@@ -92,6 +103,7 @@ const excluirIdioma = async (id) => {
     }
 }
 
+//Insere um novo idioma
 const inserirIdioma = async (idioma, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
@@ -137,6 +149,7 @@ const inserirIdioma = async (idioma, contentType) => {
     }
 }
 
+//Atualiza um idioma já cadastrado
 const atualizarIdioma = async (idioma, id, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
 
@@ -190,6 +203,7 @@ const atualizarIdioma = async (idioma, id, contentType) => {
     }
 }
 
+//Valida os dados do idioma
 const validarIdioma = async (idioma, atualizar) => {
 
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGENS))
@@ -244,6 +258,7 @@ const validarIdioma = async (idioma, atualizar) => {
 }
 
 
+//Exporte das funções
 module.exports = {
     listarIdiomas,
     buscarIdiomasId,

@@ -1,6 +1,15 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de tipo de distribuicao
+ * Data: 04/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
+
+//Imports
 const tipoDistribuidoraDAO = require('../../model/DAO/tipo_distribuidora')
 const DEFAULT_MENSAGENS = require('../modulo/config_menssages.js')
 
+//Retorna todos os tipo de distribuidoras
 const listarTipoDistribuidora = async () => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -27,6 +36,7 @@ const listarTipoDistribuidora = async () => {
     }
 }
 
+//Retorna um tipo de distribuidora pelo id
 const buscarTipoDistribuidoraID = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -60,6 +70,7 @@ const buscarTipoDistribuidoraID = async (id) => {
     }
 }
 
+//Deleta um tipo de distribuidora
 const deletarTipoDistribuidoraId = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
     try {
@@ -81,6 +92,7 @@ const deletarTipoDistribuidoraId = async (id) => {
     }
 }
 
+//Inseri um novo tipo de distribuidora
 const inserirTipoDistribuidora = async (tipoDistribuidora, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -123,7 +135,7 @@ const inserirTipoDistribuidora = async (tipoDistribuidora, contentType) => {
     }
 }
 
-
+//Atualiza um  tipo de distribuidora pelo id
 const atualizarTipoDistribuidora = async (tipoDistribuidora, id, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -174,6 +186,7 @@ const atualizarTipoDistribuidora = async (tipoDistribuidora, id, contentType) =>
     }
 }
 
+//Valida os dados de tipo de distruidora.
 const validarTipoDistribuidora= async (tipoDistribuidora) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
@@ -194,6 +207,7 @@ const validarTipoDistribuidora= async (tipoDistribuidora) => {
 }
 
 
+//Exports
 module.exports ={
     listarTipoDistribuidora,
     buscarTipoDistribuidoraID,

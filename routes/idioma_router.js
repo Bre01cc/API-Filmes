@@ -1,3 +1,11 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pelas rotas referente ao idioma
+ * Data: 03/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
+
+
 const express = require('express');
 const router = express.Router();
 
@@ -7,20 +15,25 @@ const bodyParser = require('body-parser')//Responsável por gerenciar a chegada 
 //Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
 const bodyParserJSON = bodyParser.json()
 
+//Import
 const controllerIdioma = require('../controller/idioma/controller_Idioma.js')
 
+//Responsável por devolver todos os idiomas
 router.get('/v1/locadora/idioma', cors(), async function (request, response) {
     let idioma = await controllerIdioma.listarIdiomas()
     response.status(idioma.status_code)
     response.json(idioma)
 })
 
+//Responsável por devolver um idioma pelo id
 router.get('/v1/locadora/idioma/:id', cors(), async function (request, response) {
     let IDidioma = request.params.id
     let idioma = await controllerIdioma.buscarIdiomasId(IDidioma)
     response.status(idioma.status_code)
     response.json(idioma)
 })
+
+//Responsável por cadastrar um novo idioma
 router.post('/v1/locadora/idioma', cors(), bodyParserJSON, async function (request, response) {
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
     let dadosBody = request.body
@@ -33,6 +46,7 @@ router.post('/v1/locadora/idioma', cors(), bodyParserJSON, async function (reque
 
 })
 
+//Responsável por deletar um idioma
 router.delete('/v1/locadora/idioma/:id', cors(), async function (request, response) {
     let IDidioma = request.params.id
     let idioma = await controllerIdioma.excluirIdioma(IDidioma)
@@ -40,6 +54,7 @@ router.delete('/v1/locadora/idioma/:id', cors(), async function (request, respon
     response.json(idioma)
 })
 
+//Responsável por atualizar um idioma
 router.put('/v1/locadora/idioma/:id', bodyParserJSON, cors(), async function (request, response) {
     
     //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
@@ -52,4 +67,5 @@ router.put('/v1/locadora/idioma/:id', bodyParserJSON, cors(), async function (re
     response.json(idioma)
 })
 
+//Exporte da router
 module.exports = router;

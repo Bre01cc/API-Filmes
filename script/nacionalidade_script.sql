@@ -1,3 +1,5 @@
+
+-- Criação da tabela nacionalidade
 create table tbl_nacionalidade(
     id_nacionalidade int primary key auto_increment,
     nome varchar(100) not null,
@@ -5,6 +7,7 @@ create table tbl_nacionalidade(
     data_criacao Date not null
 );
 
+-- Insert de nacionalidades
 insert into tbl_nacionalidade(nome, sigla, data_criacao)
 values
 ('Brasil', 'BR', '1822-09-07'),

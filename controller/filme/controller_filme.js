@@ -1,15 +1,14 @@
 /***********************************************************************************************************************
  * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de Filmes
  * Data: 01/10/2025
- * Autot: Breno Oliveira Assis Reis
+ * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
 
-//Importe da model do DAO do filme
+//Imports
 const filmeDAO = require('../../model/DAO/filme.js')
-
-//Importe do arquivo de mensssagens
 const DEFAULT_MENSSAGENS = require('../modulo/config_menssages.js')
+
 //Retorna uma lista de todos os filmes
 const listarFilmes = async () => {
 
@@ -18,7 +17,9 @@ const listarFilmes = async () => {
     //Chama a funçã do DAO para retornar a lista de filmes do BD
     let resulFilmes = await filmeDAO.getSelectAllFilms();
     try {
+
         if (resulFilmes) {
+            
             if (resulFilmes.length > 0) {
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                 MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
@@ -253,9 +254,11 @@ const validarDadosFilmes = async (filme) => {
     }
 }
 
+//Exporte das funções
 module.exports = {
     listarFilmes,
     buscarFilmesId,
     inserirFilme,
-    excluirFilme
+    excluirFilme,
+    atualizarFilme
 }

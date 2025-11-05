@@ -1,12 +1,12 @@
--- Criação da tabela
+-- Criação da tabela genero
 CREATE TABLE tbl_genero (
     id_genero INT PRIMARY KEY auto_increment,
     nome VARCHAR(100) NOT NULL,
     descricao VARCHAR(500) NOT NULL,
-    data_criacao DATE NULL
+    data_criacao DATE not null
 );
 
--- Inserção de dados de exemplo
+-- insert de generos
 INSERT INTO tbl_genero (nome, descricao, data_criacao)
 VALUES 
 ('Ação', 'Filmes com cenas de ação intensa e aventura', '2025-10-28'),
