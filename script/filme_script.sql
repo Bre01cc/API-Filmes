@@ -1,6 +1,6 @@
 -- Criação do banco de dados
-CREATE DATABASE db_locadora_filme_ds2m_25_2;
-USE db_locadora_filme_ds2m_25_2;
+CREATE DATABASE db_locadora_filme_ds2m_25_2_breno;
+USE db_locadora_filme_ds2m_25_2_breno;
 
 
 -- Criação da tabela filme

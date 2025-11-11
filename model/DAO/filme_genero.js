@@ -122,7 +122,7 @@ const getSelectLastId = async () => {
         let sql = `select id from tbl_filme_genero order by id desc limit 1;`
         let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
-            return Number(result[0].id_genero)
+            return Number(result[0].id)
         } else {
             return false
         }

@@ -55,6 +55,12 @@ const ERROR_CONTENT_TYPE  = {
     message:'Não foi possível processar a requisição o tipo de dados enviados no corpo deve ser JSON!!!'
 }
 
+const ERROR_RELATION_TABLE ={
+    status:false,
+    status_code:200,
+    message:'A requisição foi bem sucedida na criação do item principal, porém houveram problemas na tabela relacionamento!!!'
+}
+
 /*****************************************************MENSAGENS DE SUCESSO**********************************************/
 //Mensagem de sucesso da requisição
 const SUCCESS_REQUEST = {
@@ -93,8 +99,8 @@ module.exports = {
     ERROR_REQUIRED_FIELDS,
     ERROR_CONTENT_TYPE,
     SUCCESS_UPDATE_ITEM,
-    SUCCESS_DELETE
-   
+    SUCCESS_DELETE,
+    ERROR_RELATION_TABLE
 }
 
 

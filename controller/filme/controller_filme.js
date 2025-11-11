@@ -22,8 +22,16 @@ const listarFilmes = async () => {
     try {
 
         if (resulFilmes) {
-            
+
             if (resulFilmes.length > 0) {
+              
+                for (filme of resulFilmes) {
+                   let resultGenerosFilme = await ControllerFilmeGenero.listarGenerosIdFilme(filme.id_filme)
+                   if(resultGenerosFilme.status_code == 200){
+                    filme.genero = resultGenerosFilme.items.filmes_generos
+                   }
+
+                }
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                 MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
                 MENSSAGES.DEFAULT_HEADER.items.filmes = resulFilmes
@@ -55,11 +63,19 @@ const buscarFilmesId = async (id) => {
 
             //Se getSelectByFilms tiver sido executado corretamente  ele vai passar nessa primeira verificação, já caso algo estiver errado o valor de resultFilmes será false
             if (resultFilmes) {
+
                 //Verificando se resulfilmes não está vazio
                 if (resultFilmes.length > 0) {
+                    let resultGenerosFilme = await ControllerFilmeGenero.listarGenerosIdFilme(id)
+
+                    if (resultGenerosFilme.status_code == 200) {
+                        resultFilmes[0].genero = resultGenerosFilme.items.filmes_generos
+                    }
+
                     MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                     MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
                     MENSSAGES.DEFAULT_HEADER.items.filme = resultFilmes
+
 
                     return MENSSAGES.DEFAULT_HEADER
                 } else {
@@ -106,17 +122,32 @@ const inserirFilme = async (filme, contentType) => {
                     let lastID = await filmeDAO.getSelectLastId();
                     if (lastID) {
 
-                        filme.genero.forEach( async function(genero){
-                                let filmeGenero ={id_filme: lastID,id_genero: genero.id}
-                                let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero)
-                        });
+                        // filme.genero.forEach( async function(genero){
+                        //for of para a execução do código até ser finalizado, diferente forEach onde o coódigo continua.
+                        for (genero of filme.genero) {
+                            let filmeGenero = {
+                                id_filme: lastID,
+                                id_genero: genero.id
+                            }
+                            let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+
+                            if (resultFilmesGeneros.status_code != 201) {
+                                return MENSSAGES.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                            }
+                        }
                         //Adiciona o ID no JSON com os dados do filme
                         filme.id = lastID
                         MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_CREATED_ITEM.status
                         MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_CREATED_ITEM.status_code
                         MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_CREATED_ITEM.message
-                        MENSSAGES.DEFAULT_HEADER.items = filme
 
+                        //Processamento para trazer dados dos generos cadastratos na tabela  de relação
+                        delete filme.genero
+                        let resultGenerosFilme = await ControllerFilmeGenero.listarGenerosIdFilme(lastID)
+
+                        //Adicionar novamente o atributo genero com todas as informações do genero (id,nome)
+                        filme.genero = resultGenerosFilme.items.filmes_generos
+                        MENSSAGES.DEFAULT_HEADER.items = filme
                         return MENSSAGES.DEFAULT_HEADER//201
 
                     } else {
@@ -124,7 +155,7 @@ const inserirFilme = async (filme, contentType) => {
                     }
 
                 } else {
-                    
+
                     return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
                 }
             }
