@@ -74,6 +74,43 @@ const buscarFilmeGeneroId = async (id) => {
     }
 }
 
+//Retorna o gênero pelo Id
+const buscarFilmeId = async (id) => {
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+
+    try {
+        //Validação da chegada do ID
+        if (!isNaN(id) && id != null && id > 0) {
+            //cria uma variável local para executar a função getSelectByFilms, passando para ela o ID
+            let resultFilmesGeneros = await filmeGeneroDAO.getSelectByMovieId(Number(id))
+
+            //Se getSelectByFilms tiver sido executado corretamente  ele vai passar nessa primeira verificação, já caso algo estiver errado o valor de resultFilmes será false
+            if (resultFilmesGeneros) {
+                //Verificando se resulfilmes não está vazio
+                if (resultFilmesGeneros.length > 0) {
+                    MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
+                    MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
+                    MENSSAGES.DEFAULT_HEADER.items.filmes = resultFilmesGeneros
+
+                    return MENSSAGES.DEFAULT_HEADER//200
+                } else {
+                    return MENSSAGES.ERROR_NOT_FOUND//404
+                }
+            } else {
+                return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
+            }
+
+        } else {
+
+            MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
+            return MENSSAGES.ERROR_REQUIRED_FIELDS//400
+
+        }
+
+    } catch (error) {
+        return MENSSAGES.ERROR_REQUIRED_FIELDS//400
+    }
+}
 const listarGenerosIdFilme = async (idFilme) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -297,6 +334,39 @@ const excluirFilmeGenero = async (id) => {
 
 }
 
+//Excluir generos
+const excluirGenerosIdFilme = async (id) => {
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    //Chama a funçã do DAO para retornar a lista de filmes do BD
+    try {
+
+        let validarId = await buscarFilmeId(id)
+        if (validarId.status_code == 200) {
+
+            let deletarFilmeGeneros = await filmeGeneroDAO.setDeleteGenderesByidMovie(id);
+            if (deletarFilmeGeneros) {
+                MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
+                MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
+                MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
+                delete MENSSAGES.DEFAULT_HEADER.items
+                return MENSSAGES.DEFAULT_HEADER
+            } else {
+                MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+
+        } else {
+            return validarId
+        }
+
+    } catch (error) {
+        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
+    }
+
+
+
+
+}
 module.exports = {
     listarFilmesGenero,
     listarGenerosIdFilme,
@@ -305,4 +375,5 @@ module.exports = {
     excluirFilmeGenero,
     inserirFilmeGenero,
     atualizarFilmeGenero,
+    excluirGenerosIdFilme
 }

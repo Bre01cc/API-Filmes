@@ -24,12 +24,12 @@ const listarFilmes = async () => {
         if (resulFilmes) {
 
             if (resulFilmes.length > 0) {
-              
+
                 for (filme of resulFilmes) {
-                   let resultGenerosFilme = await ControllerFilmeGenero.listarGenerosIdFilme(filme.id_filme)
-                   if(resultGenerosFilme.status_code == 200){
-                    filme.genero = resultGenerosFilme.items.filmes_generos
-                   }
+                    let resultGenerosFilme = await ControllerFilmeGenero.listarGenerosIdFilme(filme.id_filme)
+                    if (resultGenerosFilme.status_code == 200) {
+                        filme.genero = resultGenerosFilme.items.filmes_generos
+                    }
 
                 }
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
@@ -124,29 +124,34 @@ const inserirFilme = async (filme, contentType) => {
 
                         // filme.genero.forEach( async function(genero){
                         //for of para a execução do código até ser finalizado, diferente forEach onde o coódigo continua.
-                        for (genero of filme.genero) {
-                            let filmeGenero = {
-                                id_filme: lastID,
-                                id_genero: genero.id
-                            }
-                            let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+                        if (filme.genero != undefined) {
+                            for (genero of filme.genero) {
+                                let filmeGenero = {
+                                    id_filme: lastID,
+                                    id_genero: genero.id
+                                }
+                                let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
 
-                            if (resultFilmesGeneros.status_code != 201) {
-                                return MENSSAGES.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                                if (resultFilmesGeneros.status_code != 201) {
+                                    return MENSSAGES.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                                } else {
+                                    //Adiciona o ID no JSON com os dados do filme
+
+                                    //Processamento para trazer dados dos generos cadastratos na tabela  de relação
+                                    delete filme.genero
+                                    let resultGenerosFilme = await ControllerFilmeGenero.listarGenerosIdFilme(lastID)
+
+                                    //Adicionar novamente o atributo genero com todas as informações do genero (id,nome)
+                                    filme.genero = resultGenerosFilme.items.filmes_generos
+                                }
+
                             }
                         }
-                        //Adiciona o ID no JSON com os dados do filme
+
                         filme.id = lastID
                         MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_CREATED_ITEM.status
                         MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_CREATED_ITEM.status_code
                         MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_CREATED_ITEM.message
-
-                        //Processamento para trazer dados dos generos cadastratos na tabela  de relação
-                        delete filme.genero
-                        let resultGenerosFilme = await ControllerFilmeGenero.listarGenerosIdFilme(lastID)
-
-                        //Adicionar novamente o atributo genero com todas as informações do genero (id,nome)
-                        filme.genero = resultGenerosFilme.items.filmes_generos
                         MENSSAGES.DEFAULT_HEADER.items = filme
                         return MENSSAGES.DEFAULT_HEADER//201
 
@@ -167,7 +172,9 @@ const inserirFilme = async (filme, contentType) => {
             return MENSSAGES.ERROR_CONTENT_TYPE
         }
     } catch (error) {
+        console.log(error)
         return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
+
     }
 
 }
@@ -189,12 +196,33 @@ const atualizarFilme = async (filme, id, contentType) => {
                 // Validação de id, chamndo a função que verifica no BD
                 let validarId = await buscarFilmesId(id)
                 if (validarId.status_code == 200) {
+
+
                     // adiciona o ID do filme no JSON de dados para ser encaminhado
                     filme.id = Number(id)
 
                     //Chama a função para inserir um novo filme no BD
                     let resultFilmes = await filmeDAO.setUpdateFilms(filme)
                     if (resultFilmes) {
+
+                        let excluirGeneros = await ControllerFilmeGenero.excluirGenerosIdFilme(id)
+                        if (excluirGeneros.status_code != 200) {
+
+                            return MENSSAGENS.ERROR_RELATION_TABLE
+
+                        } else {
+                            for (genero of filme.genero) {
+                                let filmeGenero = {
+                                    id_filme: id,
+                                    id_genero: genero.id
+                                }
+                                let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+
+                                if (resultFilmesGeneros.status_code != 201) {
+                                    return MENSSAGENS.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                                }
+                            }
+                        }
 
                         MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_UPDATE_ITEM.status
                         MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_UPDATE_ITEM.status_code
@@ -233,13 +261,26 @@ const excluirFilme = async (id) => {
         let validarId = await buscarFilmesId(id)
         if (validarId.status_code == 200) {
 
-            deletarFilme = await filmeDAO.setDeleteFilms(id);
-            MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
-            MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
-            MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
-            delete MENSSAGES.DEFAULT_HEADER.items
-            return MENSSAGES.DEFAULT_HEADER
 
+            let excluirGeneros = await ControllerFilmeGenero.excluirGenerosIdFilme(id)
+
+          if (excluirGeneros.status_code == 500) {
+
+                return MENSSAGES.ERROR_RELATION_TABLE
+
+            }else{
+                let deletarFilme = await filmeDAO.setDeleteFilms(id);
+                if (deletarFilme) {
+                    MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
+                    MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
+                    MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
+                    delete MENSSAGES.DEFAULT_HEADER.items
+                    return MENSSAGES.DEFAULT_HEADER
+                } else {
+                    return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+                }
+            }
+            
         } else {
             return validarId
         }
