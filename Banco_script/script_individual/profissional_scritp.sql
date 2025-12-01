@@ -1,13 +1,13 @@
 create table tbl_profissional(
- id_profissional int primary key auto_increment,
- nome Varchar(100) not null,
- data_nascimento date not null,
- nome_artistico varchar(100) not null,
- foto varchar(100) not null,
- data_falecimento date null,
- rede_social varchar(150)not null,
- biografia varchar(500) not null,
- sexo varchar(1) not null
+    id_profissional int primary key auto_increment,
+    nome Varchar(100) not null,
+    data_nascimento date not null,
+    nome_artistico varchar(100) not null,
+    foto varchar(100) not null,
+    data_falecimento date null,
+    rede_social varchar(150)not null,
+    biografia varchar(500) not null,
+    sexo varchar(1) not null
 );
 
 -- Insert de profissionais
