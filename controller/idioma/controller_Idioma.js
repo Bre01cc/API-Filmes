@@ -240,8 +240,6 @@ const validarIdioma = async (idioma, atualizar) => {
             idioma.antes_de_cristo = 0;
         }
 
-
-
         else {
             MENSSAGENS.ERROR_REQUIRED_FIELDS.message += '[antes_de_cristo incorreto]'
             return MENSSAGENS.ERROR_REQUIRED_FIELDS

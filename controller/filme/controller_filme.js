@@ -128,8 +128,9 @@ const inserirFilme = async (filme, contentType) => {
                             for (genero of filme.genero) {
                                 let filmeGenero = {
                                     id_filme: lastID,
-                                    id_genero: genero.id
+                                    id_genero: genero.id_genero
                                 }
+                               
                                 let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
 
                                 if (resultFilmesGeneros.status_code != 201) {
@@ -172,7 +173,7 @@ const inserirFilme = async (filme, contentType) => {
             return MENSSAGES.ERROR_CONTENT_TYPE
         }
     } catch (error) {
-        console.log(error)
+      
         return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
 
     }
@@ -206,7 +207,8 @@ const atualizarFilme = async (filme, id, contentType) => {
                     if (resultFilmes) {
 
                         let excluirGeneros = await ControllerFilmeGenero.excluirGenerosIdFilme(id)
-                        if (excluirGeneros.status_code != 200) {
+                        
+                        if (excluirGeneros.status_code != 200 && excluirGeneros.status_code != 404) {
 
                             return MENSSAGENS.ERROR_RELATION_TABLE
 
@@ -214,8 +216,9 @@ const atualizarFilme = async (filme, id, contentType) => {
                             for (genero of filme.genero) {
                                 let filmeGenero = {
                                     id_filme: id,
-                                    id_genero: genero.id
+                                    id_genero: genero.id_genero
                                 }
+                             
                                 let resultFilmesGeneros = await ControllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
 
                                 if (resultFilmesGeneros.status_code != 201) {

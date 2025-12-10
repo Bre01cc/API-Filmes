@@ -97,6 +97,7 @@ const getSelectByFilms = async (id) => {
 
 }
 
+//Retorna o último id
 const getSelectLastId = async () => {
     try {
         let sql = `select id_filme from tbl_filme order by id_filme desc limit 1;`

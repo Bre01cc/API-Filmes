@@ -6,6 +6,7 @@
  ***********************************************************************************************************************/
 
 const nacionalidadeDAO = require('../../model/DAO/nacionalidade.js')
+const controllerEstudio = require('../estudio/estudio_controller.js')
 const DEFAULT_MENSAGENS = require('../modulo/config_menssages.js')
 
 //Retorna todas as nacionalidades
@@ -76,13 +77,23 @@ const deletarNacionalidadeId = async (id) => {
         let validarId = await buscarNacionalidadeID(id)
         if (validarId.status_code == 200) {
 
-            let deletarNacionalidade = await nacionalidadeDAO.setDeleteNacionalidade(id)
-            MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
-            MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
-            MENSAGENS.DEFAULT_HEADER.message = MENSAGENS.SUCCESS_DELETE.message
-            delete MENSAGENS.DEFAULT_HEADER.items
+            let excluirEstudios = await controllerEstudio.deletarEstudioIdNacionalidade(id)
 
-            return MENSAGENS.DEFAULT_HEADER
+            if (excluirEstudios.status_code == 500) {
+
+                return MENSAGENS.ERROR_RELATION_TABLE
+
+            }
+            let deletarNacionalidade = await nacionalidadeDAO.setDeleteNacionalidade(id)
+            if (deletarNacionalidade) {
+                MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
+                MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
+                MENSAGENS.DEFAULT_HEADER.message = MENSAGENS.SUCCESS_DELETE.message
+                delete MENSAGENS.DEFAULT_HEADER.items
+
+                return MENSAGENS.DEFAULT_HEADER
+            }
+
         } else {
             return validarId
         }

@@ -19,7 +19,7 @@ const controllerGenero = require('../controller/genero/controller_genero.js')
 
 
 //Responsável por devolver todos os generos
-router.get('/v1/locadora/generos', cors(), async function (request, response) {
+router.get('/v1/locadora/genero', cors(), async function (request, response) {
     let genero = await controllerGenero.listarGenero()
     response.status(genero.status_code)
     response.json(genero)

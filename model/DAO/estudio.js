@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
- * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao relacionamento de filme e genero
- * Data: 05/11/2025
+ * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao estudio
+ * Data: 08/12/2025
  * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
@@ -16,11 +16,12 @@ const prisma = new PrismaClient()
 //executeRaw()        -> permite executar comandos sem  estar em uma variável e não retorna nenhum dados, no caso injeta dados no banco.
 
 
-//Buscar todos filmes e generos da tabela relcionamento
-const getSelectAllMoviesGenres = async () => {
+//Buscar todos os estudios
+const getSelectAllstudio = async () => {
 
     try {
-        let sql = `select * from tbl_filme_genero order by id desc`
+        let sql = `select * from vw_estudio order by id_estudio desc`
+
         let result = await prisma.$queryRawUnsafe(sql)
         //Verificando se o result tem algo dentro dele
         if (Array.isArray(result))
@@ -35,62 +36,13 @@ const getSelectAllMoviesGenres = async () => {
     }
 }
 
-//Busca  um gênero pelo id
-const getSelectByGenre = async (id) => {
+//Busca  um estudio pelo id
+const getSelectBystudio = async (id) => {
 
     try {
 
         //Emcaminha para o BD o script SQL
-        let sql = `select * from tbl_filme_genero where id =${id}`
-
-        let result = await prisma.$queryRawUnsafe(sql)
-        //Verificando se o result tem algo dentro dele
-        if (Array.isArray(result))
-
-
-            return result
-        else
-            return false
-
-
-    } catch (error) {
-        return false
-
-    }
-
-}
-
-const getSelectByMovieId = async (id) => {
-
-    try {
-
-        //Emcaminha para o BD o script SQL
-        let sql = `select * from tbl_filme_genero where id_filme =${id}`
-
-        let result = await prisma.$queryRawUnsafe(sql)
-        //Verificando se o result tem algo dentro dele
-        if (Array.isArray(result))
-
-
-            return result
-        else
-            return false
-
-
-    } catch (error) {
-        return false
-
-    }
-
-}
-//Busca filtrando o id do filme
-const getSelectGenresByidMovies = async (id) => {
-
-    try {
-
-        //Emcaminha para o BD o script SQL
-        let sql = `select tbl_genero.id_genero,tbl_genero.nome  from tbl_filme  join tbl_filme_genero
-        on tbl_filme.id_filme = tbl_filme_genero.id_filme join tbl_genero on tbl_genero.id_genero = tbl_filme_genero.id_genero where tbl_filme.id_filme =${id}`
+        let sql = `select * from vw_estudio where id_estudio =${id}`
 
         let result = await prisma.$queryRawUnsafe(sql)
         //Verificando se o result tem algo dentro dele
@@ -109,17 +61,13 @@ const getSelectGenresByidMovies = async (id) => {
 
 }
 
-//Busca filtrando o id do genero
-const getSelectMoviesByIdGenres = async (id) => {
+//Busca  um estudio pelo id
+const getSelectByNationality = async (id) => {
 
     try {
 
         //Emcaminha para o BD o script SQL
-
-        let sql = `select tbl_filme.id_filme,tbl_filme.nome  
-        from tbl_filme  join tbl_filme_genero
-        on tbl_filme.id_filme = tbl_filme_genero.id_filme join 
-        tbl_genero on tbl_genero.id_genero = tbl_filme_genero.id_genero where tbl_genero.id_genero =${id}`
+        let sql = `select * from vw_estudio where id_nacionalidade =${id}`
 
         let result = await prisma.$queryRawUnsafe(sql)
         //Verificando se o result tem algo dentro dele
@@ -142,10 +90,11 @@ const getSelectMoviesByIdGenres = async (id) => {
 const getSelectLastId = async () => {
     try {
 
-        let sql = `select id from tbl_filme_genero order by id desc limit 1;`
+        let sql = `select id_estudio from tbl_estudio order by id_estudio desc limit 1;`
         let result = await prisma.$queryRawUnsafe(sql)
+        
         if (Array.isArray(result)) {
-            return Number(result[0].id)
+            return Number(result[0].id_estudio)
         } else {
             return false
         }
@@ -155,33 +104,99 @@ const getSelectLastId = async () => {
     }
 }
 
-//Inseri um novo gênero 
-const setInsertMoviesGenres = async (filmeGenero) => {
+//Inseri um novo estudio
+const setInsertStudios = async (estudio) => {
     try {
 
-        let sql = `INSERT into tbl_filme_genero(id_filme,id_genero) 
-VALUES(
-    ${filmeGenero.id_filme},
-    '${filmeGenero.id_genero}');`
+        let sql = ''
+        if ('produtora' in estudio && !('dublagem' in estudio)) {
+            sql = `INSERT INTO tbl_estudio (
+    nome,
+    nome_fantasia,
+    produtora,
+    ano_fundacao,
+    email,
+    telefone,
+    id_nacionalidade
+) VALUES (
+    '${estudio.nome}',
+    '${estudio.nome_fantasia}',
+    ${estudio.produtora},
+    '${estudio.ano_fundacao}',
+    '${estudio.email}',
+    '${estudio.telefone}',
+    ${estudio.id_nacionalidade}
+);`
+        }
+        if ('dublagem' in estudio && !('produtora' in estudio)) {
+            sql = `INSERT INTO tbl_estudio (
+    nome,
+    nome_fantasia,
+    dublagem,
+    ano_fundacao,
+    email,
+    telefone,
+    id_nacionalidade
+) VALUES (
+    '${estudio.nome}',
+    '${estudio.nome_fantasia}',
+    ${estudio.dublagem},
+    '${estudio.ano_fundacao}',
+    '${estudio.email}',
+    '${estudio.telefone}',
+    ${estudio.id_nacionalidade}
+);`
+        } else {
+            sql = `INSERT INTO tbl_estudio (
+    nome,
+    nome_fantasia,
+    dublagem,
+    produtora,
+    ano_fundacao,
+    email,
+    telefone,
+    id_nacionalidade
+) VALUES (
+    '${estudio.nome}',
+    '${estudio.nome_fantasia}',
+    ${estudio.dublagem},
+    ${estudio.produtora},
+    '${estudio.ano_fundacao}',
+    '${estudio.email}',
+    '${estudio.telefone}',
+    ${estudio.id_nacionalidade}
+);`
+        }
 
         let result = await prisma.$executeRawUnsafe(sql)
+
         if (result) {
             return true
         } else {
             return false
         }
     } catch (error) {
+       
         return false
     }
 }
 
-//Atualiza o gênero pelo ID
-const setUpdateMoviesGenres = async (filmeGenero) => {
+//Atualiza o estudio pelo ID
+const setUpdateStudio = async (estudio) => {
     try {
-        let sql = `Update tbl_filme_genero
-        set id_filme = '${filmeGenero.id_filme}',
-        id_genero = '${filmeGenero.id_genero}',
-        where id = ${filmeGenero.id}`
+        let sql = `
+    UPDATE tbl_estudio
+    SET
+        nome = '${estudio.nome}',
+        nome_fantasia = '${estudio.nome_fantasia}',
+        dublagem = ${estudio.dublagem},
+        produtora = ${estudio.produtora},
+        ano_fundacao = '${estudio.ano_fundacao}',
+        email = '${estudio.email}',
+        telefone = '${estudio.telefone}',
+        id_nacionalidade = ${estudio.id_nacionalidade}
+    WHERE id_estudio = ${estudio.id_estudio};`
+
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -191,14 +206,15 @@ const setUpdateMoviesGenres = async (filmeGenero) => {
             return false
         }
     } catch (error) {
+      
         return false
     }
 }
 
-//Deleta um gênero pelo ID
-const setDeleteMoviesGenres = async (id) => {
+//Deleta um estudio pelo ID
+const setDeleteStudio = async (id) => {
     try {
-        let sql = `delete from tbl_filme_genero where id = ${id}`
+        let sql = `delete from tbl_estudio where id_estudio = ${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
@@ -213,10 +229,9 @@ const setDeleteMoviesGenres = async (id) => {
     }
 }
 
-const setDeleteGenderesByidMovie = async (id_filme) => {
+const setDeleteStudioByNationality = async (id) => {
     try {
-        console.log(id_filme)
-        let sql = `delete from tbl_filme_genero where id_filme = ${id_filme}`
+        let sql = `delete from tbl_estudio where id_nacionalidade = ${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
@@ -224,21 +239,20 @@ const setDeleteGenderesByidMovie = async (id_filme) => {
         } else {
             return false
         }
-    } catch (error) {
-        return false
     }
 
+    catch (error) {
+        return false
+    }
 }
-module.exports = {
-    getSelectAllMoviesGenres,
-    getSelectByGenre,
-    getSelectGenresByidMovies,
-    getSelectMoviesByIdGenres,
-    getSelectLastId,
-    setDeleteMoviesGenres,
-    setUpdateMoviesGenres,
-    setInsertMoviesGenres,
-    setDeleteGenderesByidMovie,
-    getSelectByMovieId
 
+module.exports = {
+    getSelectAllstudio,
+    getSelectBystudio,
+    getSelectByNationality,
+    getSelectLastId,
+    setInsertStudios,
+    setUpdateStudio,
+    setDeleteStudio,
+    setDeleteStudioByNationality
 }

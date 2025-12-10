@@ -35,6 +35,8 @@ const generoRotas = require('./routes/genero_router.js')
 const nacionalidadeRotas = require('./routes/nacionalidade_router.js')
 const tipoDistribuidoraRotas = require('./routes/tipo_distribuidora_router.js')
 const profissionalRotas = require('./routes/profissional_router.js')
+const estudioRotas = require('./routes/estudio.js')
+const distribuidoraRotas = require('./routes/distribuidora.js')
 
 app.use(filmesRotas)
 app.use(generoRotas)
@@ -42,6 +44,8 @@ app.use(idiomasRotas)
 app.use(nacionalidadeRotas)
 app.use(tipoDistribuidoraRotas)
 app.use(profissionalRotas)
+app.use(estudioRotas)
+app.use(distribuidoraRotas)
 
 app.listen(PORT, function () {
     console.log('API aguardando requisições.....')
