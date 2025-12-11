@@ -103,7 +103,7 @@ const setUpdateProfissional = async (profissional) => {
             return false
 
     } catch (error) {
-        console.log(error)
+        
         return false
     }
 }
@@ -172,7 +172,7 @@ const setProfissional = async (profissional) => {
             return false
 
     } catch (error) {
-        console.log(error)
+      
         return false
     }
 }

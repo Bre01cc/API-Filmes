@@ -220,3 +220,19 @@ nacionalidade.id_nacionalidade = estudio.id_nacionalidade;
     from tbl_profissional_nacionalidade profissional_nacionalidade join tbl_profissional profissional
     on profissional_nacionalidade.id_profissional = profissional.id_profissional join tbl_nacionalidade nacionalidade
     on nacionalidade.id_nacionalidade = profissional_nacionalidade.id_nacionalidade;
+
+
+-- =============================================================
+-- 1) Trigger: Tipo distribuidora x Distribuidora
+-- =============================================================
+DELIMITER $$
+
+CREATE TRIGGER trg_delete_distribuidora_on_tipo_delete
+BEFORE DELETE ON tbl_tipo_distribuidora
+FOR EACH ROW
+BEGIN
+    DELETE FROM tbl_distribuidora
+    WHERE id_tipo_distribuidora = OLD.id_tipo_distribuidora;
+END$$
+
+DELIMITER ;

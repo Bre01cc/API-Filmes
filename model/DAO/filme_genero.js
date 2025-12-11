@@ -215,7 +215,7 @@ const setDeleteMoviesGenres = async (id) => {
 
 const setDeleteGenderesByidMovie = async (id_filme) => {
     try {
-        console.log(id_filme)
+      
         let sql = `delete from tbl_filme_genero where id_filme = ${id_filme}`
 
         let result = await prisma.$executeRawUnsafe(sql)

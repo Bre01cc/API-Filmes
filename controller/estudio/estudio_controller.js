@@ -142,7 +142,7 @@ const deletarEstudioIdNacionalidade = async (id) => {
         
         if (validarId.status_code == 200) {
 
-            let deletarEstudio = await estudioDAO.setDeleteStudio(id)
+            let deletarEstudio = await estudioDAO.setDeleteStudioByNationality(id)
          
             if (deletarEstudio) {
                 MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
@@ -178,11 +178,7 @@ const inserirEstudio = async (estudio, contentType) => {
 
             if (!validar) {
 
-                 let nacionalidadeID = await controllerNacionalidade.buscarNacionalidadeID(estudio.id_nacionalidade)
-                    if(nacionalidadeID.status == false){
-                        nacionalidadeID.message +="Id nacionalidade não foi encontrado"
-                        return nacionalidadeID
-                    }
+                 
                 let resultEstudio = await estudioDAO.setInsertStudios(estudio)
 
                 if (resultEstudio) {
@@ -238,11 +234,7 @@ const atualizarEstudio = async (estudio, id, contentType) => {
 
                     estudio.id_estudio = Number(id)
 
-                    let nacionalidadeID = await controllerNacionalidade.buscarNacionalidadeID(estudio.id_nacionalidade)
-                    if(nacionalidadeID.status == false){
-                        nacionalidadeID.message +="Id nacionalidade não foi encontrado"
-                        return nacionalidadeID
-                    }
+                   
                     let resultEstudio = await estudioDAO.setUpdateStudio(estudio)
                     if (resultEstudio) {
                         let result = await buscarEstudioID(estudio.id_estudio)

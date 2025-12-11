@@ -14,7 +14,7 @@ const listarProfissionalIdioma= async () => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     let resultProfissionalIdioma = await profissionalIdiomaDAO.getSelectAllProfissionalIdioma()
-    console.log(resultProfissionalIdioma)
+    
     try {
         if (resultProfissionalIdioma) {
             if (resultProfissionalIdioma.length > 0) {
@@ -269,7 +269,7 @@ const inserirProfissionalIdioma = async (ProfissionalIdioma, contentType) => {
             return MENSSAGENS.ERROR_CONTENT_TYPE//415
         }
     } catch (error) {
-        console.log(error)
+       
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 
@@ -426,7 +426,7 @@ const excluirProfissionalId_idiomas = async (id) => {
         if (validarId.status_code == 200) {
    
             let deletarProfissionalIdioma = await profissionalIdiomaDAO.setDeleteProfissionalByIdioma(id);
-            console.log(id)
+           
             if (deletarProfissionalIdioma) {
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
                 MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code

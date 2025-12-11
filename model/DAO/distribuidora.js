@@ -148,7 +148,7 @@ const setInsertDistributor = async (distribuidora) => {
         '${distribuidora.email}'
     );`
 
-        console.log(sql)
+     
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
             return true
@@ -190,7 +190,7 @@ const setUpdateDistributor = async (distribuidora) => {
 //Deleta uma distribuidora pelo ID
 const setDeleteDistributor = async (id) => {
     try {
-        let sql = `delete from tbl_distribuidora where id_distribuidor = ${id}`
+        let sql = `delete from tbl_distribuidora where id_distribuidora = ${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
@@ -226,7 +226,7 @@ const setDeleteDistributorByType = async (id) => {
 //Deleta uma distribuidora pelo ID
 const setDeleteDistributorByNationality = async (id) => {
     try {
-        let sql = `delete from tbl_distribuidora where id_distribuidor = ${id}`
+        let sql = `delete from tbl_distribuidora where id_nacionalidade = ${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {

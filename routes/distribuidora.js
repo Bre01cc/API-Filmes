@@ -1,104 +1,230 @@
-/***********************************************************************************************************************
- * Objetivo: Arquivo responsável pelas rotas referente ao distribuidora
- * Data: 09/12/2025
- * Autor: Breno Oliveira Assis Reis
- * Versão: 1.0
- ***********************************************************************************************************************/
-
 const express = require('express');
 const router = express.Router();
 
-const cors = require('cors')//Responsável pela permissão de API(APP)
-const bodyParser = require('body-parser')//Responsável por gerenciar a chegada dos dados da API com o front
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const bodyParserJSON = bodyParser.json();
 
-//Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
-const bodyParserJSON = bodyParser.json()
+const controllerDistribuidora = require('../controller/distribuidora/distribuidora_controller.js');
 
-//Import
-const controllerDistribuidora = require('../controller/distribuidora/distribuidora_controller')
+/**
+ * @swagger
+ * tags:
+ *   name: Distribuidora
+ *   description: Rotas para gerenciamento de distribuidoras
+ */
 
-//Responsável por devolver todos os distribuidoras
-router.get('/v1/locadora/distribuidora', cors(), async function (request, response) {
-    let distribuidora = await controllerDistribuidora.listarDistribuidora()
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Distribuidora:
+ *       type: object
+ *       properties:
+ *         nome:
+ *           type: string
+ *           example: "Warner Bros"
+ *         descricao:
+ *           type: string
+ *           example: "Distribuidora Internacional"
+ *         data_fundacao:
+ *           type: string
+ *           format: date
+ *           example: "1923-04-04"
+ *         telefone:
+ *           type: string
+ *           example: "(11) 90000-0000"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "contato@warner.com"
+ *         id_nacionalidade:
+ *           type: integer
+ *           example: 3
+ *         id_tipo_distribuidora:
+ *           type: integer
+ *           example: 1
+ *       required:
+ *         - nome
+ *         - descricao
+ *         - data_fundacao
+ *         - telefone
+ *         - email
+ *         - id_nacionalidade
+ *         - id_tipo_distribuidora
 
-//Responsável por devolver um distribuidora pelo id
-router.get('/v1/locadora/distribuidora/:id', cors(), async function (request, response) {
-    let idDistribuidora = request.params.id
-    let distribuidora = await controllerDistribuidora.buscarDistribuidoraID(idDistribuidora)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
+ *     DistribuidoraOutput:
+ *       type: object
+ *       properties:
+ *         id_distribuidora:
+ *           type: integer
+ *           example: 1
+ *         nome:
+ *           type: string
+ *           example: "Warner Bros"
+ *         descricao:
+ *           type: string
+ *           example: "Distribuidora Internacional"
+ *         data_fundacao:
+ *           type: string
+ *           format: date
+ *           example: "1923-04-04"
+ *         telefone:
+ *           type: string
+ *           example: "(11) 90000-0000"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "contato@warner.com"
+ *         id_nacionalidade:
+ *           type: integer
+ *           example: 3
+ *         id_tipo_distribuidora:
+ *           type: integer
+ *           example: 1
 
-//Responsável por devolver uma distribuidora pelo id nacionalidade
-router.get('/v1/locadora/distribuidora/nacionalidade/:id', cors(), async function (request, response) {
-    let idDistribuidora = request.params.id
-    let distribuidora = await controllerDistribuidora.buscarDistribuidoraIDNacionalidade(idDistribuidora)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
+ */
 
-//Responsável por devolver uma distribuidora pelo id tipo_distribuidora
-router.get('/v1/locadora/distribuidora/tipo/:id', cors(), async function (request, response) {
-    let idDistribuidora = request.params.id
-    let distribuidora = await controllerDistribuidora.buscarDistribuidoraIDType(idDistribuidora)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
+/**
+ * @swagger
+ * /v1/locadora/distribuidora:
+ *   get:
+ *     summary: Retorna todas as distribuidoras
+ *     tags: [Distribuidora]
+ *     responses:
+ *       200:
+ *         description: Lista de distribuidoras
+ */
+router.get('/v1/locadora/distribuidora', cors(), async (req, res) => {
+    let distribuidora = await controllerDistribuidora.listarDistribuidora();
+    res.status(distribuidora.status_code).json(distribuidora);
+});
 
-//Responsável cadastrar uma distribuidora 
-router.post('/v1/locadora/distribuidora', cors(), bodyParserJSON, async function (request, response) {
+/**
+ * @swagger
+ * /v1/locadora/distribuidora/{id}:
+ *   get:
+ *     summary: Retorna uma distribuidora pelo ID
+ *     tags: [Distribuidora]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID da distribuidora
+ *     responses:
+ *       200:
+ *         description: Distribuidora encontrada
+ */
+router.get('/v1/locadora/distribuidora/:id', cors(), async (req, res) => {
+    let idDistribuidora = req.params.id;
+    let distribuidora = await controllerDistribuidora.buscarDistribuidoraID(idDistribuidora);
+    res.status(distribuidora.status_code).json(distribuidora);
+});
 
-    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
-    let dadosBody = request.body
-    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
-    let contentType = request.headers['content-type']
-    // console.log(contentType)
+/**
+ * @swagger
+ * /v1/locadora/distribuidora/{id}:
+ *   delete:
+ *     summary: Exclui uma distribuidora pelo ID
+ *     tags: [Distribuidora]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Distribuidora excluída
+ */
+router.delete('/v1/locadora/distribuidora/:id', cors(), async (req, res) => {
+    let idDistribuidora = req.params.id;
+    let distribuidora = await controllerDistribuidora.deletarDistribuidoraId(idDistribuidora);
+    res.status(distribuidora.status_code).json(distribuidora);
+});
 
-    let distribuidora = await controllerDistribuidora.inserirDistribuidora(dadosBody, contentType)
-    // console.log(distribuidora)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
 
-})
+/**
+ * @swagger
+ * /v1/locadora/distribuidora/type/{id}:
+ *   delete:
+ *     summary: Exclui uma distribuidora pelo ID do tipo_distribuidora
+ *     tags: [Distribuidora]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Distribuidora excluída
+ */
+router.delete('/v1/locadora/distribuidora/:id', cors(), async (req, res) => {
+    let idDistribuidora = req.params.id;
+    let distribuidora = await controllerDistribuidora.deletarDistribuidoraIdType(idDistribuidora);
+    res.status(distribuidora.status_code).json(distribuidora);
+});
 
-//Responsável por atualizar um distribuidora
-router.put('/v1/locadora/distribuidora/:id', bodyParserJSON, cors(), async function (request, response) {
-    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
-    let dadosBody = request.body
-    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
-    let contentType = request.headers['content-type']
-    // console.log(contentType)
-    let idDistribuidora = request.params.id
-    let distribuidora = await controllerDistribuidora.atualizarDistribuidora(dadosBody,idDistribuidora, contentType)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
+/**
+ * @swagger
+ * /v1/locadora/distribuidora:
+ *   post:
+ *     summary: Cadastra uma nova distribuidora
+ *     tags: [Distribuidora]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Distribuidora'
+ *     responses:
+ *       201:
+ *         description: Distribuidora cadastrada
+ */
+router.post('/v1/locadora/distribuidora', cors(), bodyParserJSON, async (req, res) => {
+    let dadosBody = req.body;
+    let contentType = req.headers['content-type'];
+    let distribuidora = await controllerDistribuidora.inserirDistribuidora(dadosBody, contentType);
+    res.status(distribuidora.status_code).json(distribuidora);
+});
 
-//Responsável por deletar um distribuidora pelo id
-router.delete('/v1/locadora/distribuidora/:id', cors(), async function (request, response) {
-    let idDistribuidora = request.params.id;
-    let distribuidora = await controllerDistribuidora.deletarDistribuidoraId(idDistribuidora)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
 
-//Responsável por deletar um distribuidora pelo id da nacionalidade
-router.delete('/v1/locadora/distribuidora/nacionalidade/:id', cors(), async function (request, response) {
-    let idNacionalidade = request.params.id;
-    let distribuidora = await controllerDistribuidora.deletarDistribuidoraIdNacionalidade(idNacionalidade)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
 
-//Responsável por deletar um distribuidora pelo id da tipo_distribuidora
-router.delete('/v1/locadora/distribuidora/nacionalidade/:id', cors(), async function (request, response) {
-    let idNacionalidade = request.params.id;
-    let distribuidora = await controllerDistribuidora.deletarDistribuidoraIdType(idNacionalidade)
-    response.status(distribuidora.status_code)
-    response.json(distribuidora)
-})
+/**
+ * @swagger
+ * /v1/locadora/distribuidora/{id}:
+ *   put:
+ *     summary: Atualiza uma distribuidora pelo ID
+ *     tags: [Distribuidora]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID da distribuidora
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Distribuidora'
+ *     responses:
+ *       200:
+ *         description: Distribuidora atualizada
+ */
 
-module.exports = router
+router.put('/v1/locadora/distribuidora/:id', cors(), bodyParserJSON, async (req, res) => {
+    let dadosBody = req.body;
+    let contentType = req.headers['content-type'];
+    let idDistribuidora = req.params.id;
+    let distribuidora = await controllerDistribuidora.atualizarDistribuidora(dadosBody, idDistribuidora, contentType);
+    res.status(distribuidora.status_code).json(distribuidora);
+});
+
+module.exports = router;
+
+

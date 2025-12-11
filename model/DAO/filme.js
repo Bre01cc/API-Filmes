@@ -66,6 +66,7 @@ const getSelectAllFilms = async () => {
 
 
     } catch (error) {
+       
         return false
 
     }

@@ -78,10 +78,7 @@ const deletarTipoDistribuidoraId = async (id) => {
         let validarId = await buscarTipoDistribuidoraID(id)
         if (validarId.status_code == 200) {
 
-            let excluirDistribuidora = await controllerDistrbuidora.deletarDistribuidoraIdType(id)
-            if (excluirDistribuidora.status == 500) {
-                return MENSAGENS.ERROR_RELATION_TABLE
-            } else {
+           
                 let deletarTipoDistribuidora = await tipoDistribuidoraDAO.setDeletetipoDistribuidora(id)
                 if (deletarTipoDistribuidora) {
                     MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
@@ -94,7 +91,7 @@ const deletarTipoDistribuidoraId = async (id) => {
                     return MENSAGENS.ERROR_INTERNAL_SERVER_MODEL
                 }
 
-            }
+            
 
 
         } else {

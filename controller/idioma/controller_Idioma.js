@@ -169,7 +169,7 @@ const atualizarIdioma = async (idioma, id, contentType) => {
 
             let atualizar = true
             const validar = await validarIdioma(idioma, atualizar)
-            console.log(validar)
+           
 
             if (!validar) {
 
@@ -207,7 +207,7 @@ const atualizarIdioma = async (idioma, id, contentType) => {
         }
 
     } catch (error) {
-        console.log(error)
+       
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }

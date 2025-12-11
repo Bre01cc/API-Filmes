@@ -168,7 +168,7 @@ const inserirProfissional = async (profissional, contentType) => {
                                 } else {
                                     //Processamento para trazer dados dos generos cadastratos na tabela  de relação
                                     delete profissional.nacionalidade
-                                    console.log(ultimoId)
+                                  
                                     let nacionalidadeList = await ControllerProfissionalNacionalidade.listarNacionalidadeByProfissional(ultimoId)
 
 
@@ -224,7 +224,7 @@ const inserirProfissional = async (profissional, contentType) => {
         }
 
     } catch (error) {
-        console.log(error)
+       
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
@@ -333,7 +333,7 @@ const atualizarProfissional = async (profissional, id, contentType) => {
         }
 
     } catch (error) {
-        console.log(error)
+      
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }

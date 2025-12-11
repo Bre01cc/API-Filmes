@@ -146,7 +146,7 @@ const buscarDistribuidoraIDType = async (id) => {
 const deletarDistribuidoraId = async (id) => {
     let MENSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
     try {
-        let validarId = await buscardistribuidoraID(id)
+        let validarId = await buscarDistribuidoraID(id)
         if (validarId.status_code == 200) {
 
             let deletardistribuidora = await distribuidoraDAO.setDeleteDistributor(id)
@@ -157,6 +157,9 @@ const deletarDistribuidoraId = async (id) => {
                 delete MENSAGENS.DEFAULT_HEADER.items
 
                 return MENSAGENS.DEFAULT_HEADER
+            }
+            else{
+              return  MENSAGENS.ERROR_INTERNAL_SERVER_MODEL
             }
 
 
@@ -247,17 +250,13 @@ const inserirDistribuidora = async (distribuidora, contentType) => {
 
             if (!validar) {
 
-                let nacionalidadeID = await controllerNacionalidade.buscarNacionalidadeID(distribuidora.id_nacionalidade)
-                if (nacionalidadeID.status == false) {
-                    nacionalidadeID.message += "Id nacionalidade não foi encontrado"
-                    return nacionalidadeID
-                }
+               
                 let resultDistribuidora = await distribuidoraDAO.setInsertDistributor(distribuidora)
 
                 if (resultDistribuidora) {
                     let ultimoId = await distribuidoraDAO.getSelectLastId()
 
-                    console.log(ultimoId)
+                   
                     if (ultimoId) {
                         distribuidora.id = ultimoId
                         let result = await buscarDistribuidoraID(distribuidora.id)
@@ -284,7 +283,7 @@ const inserirDistribuidora = async (distribuidora, contentType) => {
         }
 
     } catch (error) {
-        console.log(error)
+       
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
@@ -309,11 +308,7 @@ const atualizarDistribuidora = async (distribuidora, id, contentType) => {
 
                     distribuidora.id_distribuidora = Number(id)
 
-                    let nacionalidadeID = await controllerNacionalidade.buscarNacionalidadeID(distribuidora.id_nacionalidade)
-                    if (nacionalidadeID.status == false) {
-                        nacionalidadeID.message += "Id nacionalidade não foi encontrado"
-                        return nacionalidadeID
-                    }
+                   
                     let resultDistribuidora = await distribuidoraDAO.setUpdateDistributor(distribuidora)
                     if (resultDistribuidora) {
                         let result = await buscarDistribuidoraID(distribuidora.id_distribuidora)

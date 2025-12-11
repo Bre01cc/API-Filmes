@@ -1,71 +1,185 @@
-/***********************************************************************************************************************
- * Objetivo: Arquivo responsável pelas rotas referente ao idioma
- * Data: 03/11/2025
- * Autor: Breno Oliveira Assis Reis
- * Versão: 1.0
- ***********************************************************************************************************************/
-
-
 const express = require('express');
 const router = express.Router();
 
-const cors = require('cors')//Responsável pela permissão de API(APP)
-const bodyParser = require('body-parser')//Responsável por gerenciar a chegada dos dados da API com o front
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const bodyParserJSON = bodyParser.json();
 
-//Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
-const bodyParserJSON = bodyParser.json()
+const controllerIdioma = require('../controller/idioma/controller_Idioma.js');
+/**
+ * @swagger
+ * tags:
+ *   name: Idioma
+ *   description: Rotas de idiomas
+ */
 
-//Import
-const controllerIdioma = require('../controller/idioma/controller_Idioma.js')
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Idioma:
+ *       type: object
+ *       properties:
+ *         id_idioma:
+ *           type: integer
+ *           example: 1
+ *         sigla:
+ *           type: string
+ *           example: "PT"
+ *         data_criacao:
+ *           type: string
+ *           example: "1290-01-01"
+ *         descricao:
+ *           type: string
+ *           example: "Língua portuguesa antiga, base do português moderno."
+ *         familia_linguistica:
+ *           type: string
+ *           example: "Indo-Europeia"
+ *         antes_de_cristo:
+ *           type: boolean
+ *           example: false
+ *       required:
+ *         - id_idioma
+ *         - sigla
+ *         - data_criacao
+ *         - familia_linguistica
+ *
+ *     IdiomaInput:
+ *       type: object
+ *       properties:
+ *         sigla:
+ *           type: string
+ *           example: "PT"
+ *         data_criacao:
+ *           type: string
+ *           example: "1290-01-01"
+ *         descricao:
+ *           type: string
+ *           example: "Língua portuguesa antiga, base do português moderno."
+ *         familia_linguistica:
+ *           type: string
+ *           example: "Indo-Europeia"
+ *         antes_de_cristo:
+ *           type: boolean
+ *           example: false
+ *       required:
+ *         - sigla
+ *         - data_criacao
+ *         - familia_linguistica
+ */
 
-//Responsável por devolver todos os idiomas
-router.get('/v1/locadora/idioma', cors(), async function (request, response) {
-    let idioma = await controllerIdioma.listarIdiomas()
-    response.status(idioma.status_code)
-    response.json(idioma)
-})
 
-//Responsável por devolver um idioma pelo id
-router.get('/v1/locadora/idioma/:id', cors(), async function (request, response) {
-    let IDidioma = request.params.id
-    let idioma = await controllerIdioma.buscarIdiomasId(IDidioma)
-    response.status(idioma.status_code)
-    response.json(idioma)
-})
+/**
+ * @swagger
+ * /v1/locadora/idioma:
+ *   get:
+ *     summary: Retorna todos os idiomas
+ *     tags: [Idioma]
+ *     responses:
+ *       200:
+ *         description: Lista de idiomas
+ */
+router.get('/v1/locadora/idioma', cors(), async (req, res) => {
+    let idioma = await controllerIdioma.listarIdiomas();
+    res.status(idioma.status_code).json(idioma);
+});
 
-//Responsável por cadastrar um novo idioma
-router.post('/v1/locadora/idioma', cors(), bodyParserJSON, async function (request, response) {
-    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
-    let dadosBody = request.body
-    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
-    let contentType = request.headers['content-type']
+/**
+ * @swagger
+ * /v1/locadora/idioma/{id}:
+ *   get:
+ *     summary: Retorna um idioma pelo ID
+ *     tags: [Idioma]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do idioma
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Idioma encontrado
+ */
+router.get('/v1/locadora/idioma/:id', cors(), async (req, res) => {
+    let idIdioma = req.params.id;
+    let idioma = await controllerIdioma.buscarIdiomasId(idIdioma);
+    res.status(idioma.status_code).json(idioma);
+});
 
-    let idioma = await controllerIdioma.inserirIdioma(dadosBody, contentType)
-    response.status(idioma.status_code)
-    response.json(idioma)
+/**
+ * @swagger
+ * /v1/locadora/idioma:
+ *   post:
+ *     summary: Cadastra um novo idioma
+ *     tags: [Idioma]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/IdiomaInput'
+ *     responses:
+ *       201:
+ *         description: Idioma cadastrado
+ */
+router.post('/v1/locadora/idioma', cors(), bodyParserJSON, async (req, res) => {
+    let dadosBody = req.body;
+    let contentType = req.headers['content-type'];
+    let idioma = await controllerIdioma.inserirIdioma(dadosBody, contentType);
+    res.status(idioma.status_code).json(idioma);
+});
 
-})
+/**
+ * @swagger
+ * /v1/locadora/idioma/{id}:
+ *   put:
+ *     summary: Atualiza um idioma pelo ID
+ *     tags: [Idioma]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/IdiomaInput'
+ *     responses:
+ *       200:
+ *         description: Idioma atualizado
+ */
+router.put('/v1/locadora/idioma/:id', cors(), bodyParserJSON, async (req, res) => {
+    let dadosBody = req.body;
+    let contentType = req.headers['content-type'];
+    let idIdioma = req.params.id;
+    let idioma = await controllerIdioma.atualizarIdioma(dadosBody, idIdioma, contentType);
+    res.status(idioma.status_code).json(idioma);
+});
 
-//Responsável por deletar um idioma
-router.delete('/v1/locadora/idioma/:id', cors(), async function (request, response) {
-    let IDidioma = request.params.id
-    let idioma = await controllerIdioma.excluirIdioma(IDidioma)
-    response.status(idioma.status_code)
-    response.json(idioma)
-})
+/**
+ * @swagger
+ * /v1/locadora/idioma/{id}:
+ *   delete:
+ *     summary: Exclui um idioma pelo ID
+ *     tags: [Idioma]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Idioma excluído
+ */
+router.delete('/v1/locadora/idioma/:id', cors(), async (req, res) => {
+    let idIdioma = req.params.id;
+    let idioma = await controllerIdioma.excluirIdioma(idIdioma);
+    res.status(idioma.status_code).json(idioma);
+});
 
-//Responsável por atualizar um idioma
-router.put('/v1/locadora/idioma/:id', bodyParserJSON, cors(), async function (request, response) {
-    
-    //Receber os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
-    let dadosBody = request.body
-    //Recebe o tipo de dado da requisição (JSON,XML ou ...)
-    let contentType = request.headers['content-type']
-    let idIdioma= request.params.id
-    let idioma = await controllerIdioma.atualizarIdioma(dadosBody,idIdioma,contentType)
-    response.status(idioma.status_code)
-    response.json(idioma)
-})
-
-//Exporte da router
 module.exports = router;

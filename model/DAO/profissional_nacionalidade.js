@@ -194,7 +194,7 @@ const setUpdateProfessionalNationality = async (profissionalNacionalidade) => {
             return false
         }
     } catch (error) {
-         console.log(error)
+        
         return false
     }
 
