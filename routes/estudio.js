@@ -1,5 +1,5 @@
 /***********************************************************************************************************************
- * Objetivo: Rotas para estudo com documentação Swagger corrigida
+ * Objetivo: Rotas  controller do estudio
  * Data: 11/12/2025
  * Autor: Breno Oliveira Assis Reis
  * Versão: 1.3

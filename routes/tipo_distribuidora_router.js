@@ -1,3 +1,9 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pelas rotas referente ao tipo distribuidor
+ * Data: 04/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
 const express = require('express');
 const router = express.Router();
 

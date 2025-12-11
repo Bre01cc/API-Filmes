@@ -1,3 +1,10 @@
+/***********************************************************************************************************************
+ * Objetivo: Arquivo responsável pelas rotas referente ao idioma
+ * Data: 03/11/2025
+ * Autor: Breno Oliveira Assis Reis
+ * Versão: 1.0
+ ***********************************************************************************************************************/
+
 const express = require('express');
 const router = express.Router();
 

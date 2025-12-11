@@ -1,5 +1,5 @@
 /***********************************************************************************************************************
- * Objetivo: Arquivo responsável pelas rotas referente ao filme com documentação Swagger
+ * Objetivo: Arquivo responsável pelas rotas referente ao filme
  * Data: 11/12/2025
  * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
