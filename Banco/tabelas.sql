@@ -66,7 +66,7 @@ CREATE TABLE tbl_profissional(
     nome_artistico VARCHAR(100) NOT NULL,
     foto VARCHAR(100) NOT NULL,
     data_falecimento DATE NULL,
-    rede_social VARCHAR(150) NOT NULL,
+    rede_social VARCHAR(150) NULL,
     biografia VARCHAR(500) NOT NULL,
     sexo VARCHAR(1) NOT NULL
 );
@@ -78,6 +78,7 @@ CREATE TABLE tbl_profissional(
 CREATE TABLE tbl_distribuidora(
     id_distribuidora INT PRIMARY KEY AUTO_INCREMENT,
     data_fundacao DATE NOT NULL,
+    nome varchar(100) not null,
     telefone VARCHAR(20) NOT NULL,
     id_nacionalidade INT NOT NULL,
     id_tipo_distribuidora INT NOT NULL,
@@ -219,18 +220,3 @@ nacionalidade.id_nacionalidade = estudio.id_nacionalidade;
     from tbl_profissional_nacionalidade profissional_nacionalidade join tbl_profissional profissional
     on profissional_nacionalidade.id_profissional = profissional.id_profissional join tbl_nacionalidade nacionalidade
     on nacionalidade.id_nacionalidade = profissional_nacionalidade.id_nacionalidade;
-
--- =============================================================
--- 5) View: Profissional x Idioma
--- =============================================================
-    create view vw_profissional_idioma
-    as
-    select 
-    profissional_idioma.id,
-    profissional.id_profissional,
-    profissional.nome,
-    idioma.id_idioma,
-    idioma.sigla
-    from tbl_profissional_idioma profissional_idioma join tbl_profissional profissional
-    on profissional_idioma.id_profissional = profissional.id_profissional join tbl_idioma idioma
-    on idioma.id_idioma = profissional_idioma.id_idioma;

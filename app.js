@@ -14,6 +14,9 @@ const bodyParser = require('body-parser')//Responsável por gerenciar a chegada 
 //Cria um objeto  especialista no formato JSON para receber dados via POST E PUT
 const bodyParserJSON = bodyParser.json()
 
+
+
+
 const app = express()
 
 const PORT = process.PORT || 8080
@@ -27,6 +30,11 @@ app.use((request, response, next) => {
     //Proximo, carregar os proximos endpoints
     next()
 })
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Imports das rotas
 const idiomasRotas = require('./routes/idioma_router.js')

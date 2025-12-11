@@ -21,7 +21,7 @@ const getSelectAllProfessionalNationality = async () => {
 
         let sql = 'select * from vw_profissional_nacionalidade order by id desc'
 
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
             return result
         }
@@ -38,7 +38,7 @@ const getSelectByProfessionalNationality = async (id) => {
 
         let sql = `select * from vw_profissional_nacionalidade where id = ${id}`
 
-        let result = await prisma.$executeRawUnsafe(sql)
+         let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
             return result
         }
@@ -51,12 +51,12 @@ const getSelectByProfessionalNationality = async (id) => {
 }
 
 // Retorna apenas um cadastro de profissional e nacionalidade pelo id do profissional
-const getSelectNationalitiesByProfessional = async (id) => {
+const getSelectNationalitiesByProfissional = async (id) => {
     try {
 
         let sql = `select * from vw_profissional_nacionalidade where id_profissional = ${id}`
 
-        let result = await prisma.$executeRawUnsafe(sql)
+         let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
             return result
         }
@@ -76,6 +76,49 @@ const getSelectProfessionalByNationalities = async (id) => {
         //Emcaminha para o BD o script SQL
 
         let sql = `select * from vw_profissional_nacionalidade where id_nacionalidade = ${id}`
+
+        let result = await prisma.$queryRawUnsafe(sql)
+        //Verificando se o result tem algo dentro dele
+        if (Array.isArray(result))
+
+
+            return result
+        else
+            return false
+
+
+    } catch (error) {
+        return false
+
+    }
+
+}
+// Retorna apenas um cadastro de profissional e nacionalidade pelo id do profissional
+const getSelectNationalitiesIdProfissional = async (id) => {
+    try {
+
+        let sql = `select * from tbl_profissional_nacionalidade where id_profissional = ${id}`
+
+         let result = await prisma.$queryRawUnsafe(sql)
+        if (Array.isArray(result)) {
+            return result
+        }
+        else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+// Retorna apenas um cadastro de profissional e nacionalidade pelo id da nacionalidade
+const getSelectProfessionalIdNationalities = async (id) => {
+
+    try {
+
+        //Emcaminha para o BD o script SQL
+
+        let sql = `select * from tbl_profissional_nacionalidade where id_nacionalidade = ${id}`
 
         let result = await prisma.$queryRawUnsafe(sql)
         //Verificando se o result tem algo dentro dele
@@ -128,6 +171,7 @@ const setInsertProfessionalNationality = async (profissionalNacionalidade) => {
             return false
         }
     } catch (error) {
+       
         return false
     }
 
@@ -139,7 +183,7 @@ const setUpdateProfessionalNationality = async (profissionalNacionalidade) => {
     try {
     
         let sql = `Update tbl_profissional_nacionalidade
-            set id_profissiona = ${profissionalNacionalidade.id_profissional},
+            set id_profissional = ${profissionalNacionalidade.id_profissional},
             id_nacionalidade = ${profissionalNacionalidade.id_nacionalidade}
             where id= ${profissionalNacionalidade.id};`
 
@@ -150,6 +194,7 @@ const setUpdateProfessionalNationality = async (profissionalNacionalidade) => {
             return false
         }
     } catch (error) {
+         console.log(error)
         return false
     }
 
@@ -211,9 +256,11 @@ const setDeleteProfessionalByNationalitie = async (id_nacionalidade) => {
 module.exports ={
     getSelectAllProfessionalNationality,
     getSelectByProfessionalNationality,
-    getSelectNationalitiesByProfessional,
+    getSelectNationalitiesByProfissional,
     getSelectProfessionalByNationalities,
     getSelectLastId,
+    getSelectNationalitiesIdProfissional,
+    getSelectProfessionalIdNationalities,
     setInsertProfessionalNationality,
     setUpdateProfessionalNationality,
     setDeleteNationalitiesByProfessional,

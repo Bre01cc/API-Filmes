@@ -1,25 +1,26 @@
 /***********************************************************************************************************************
- * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o crud na relação entre filme e generos
- * Data: 05/11/2025
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o crud na relação entre profissional e idioma
+ * Data: 09/12/2025
  * Autor: Breno Oliveira Assis Reis
  * Versão: 1.0
  ***********************************************************************************************************************/
 
 //Imports
-const filmeGeneroDAO = require('../../model/DAO/filme_genero.js')
+const profissionalIdiomaDAO = require('../../model/DAO/profissional_idioma.js')
 const DEFAULT_MENSSAGES = require('../modulo/config_menssages.js')
 
-//Retorna todos os gêneros
-const listarFilmesGenero = async () => {
+//Retorna  os profissional e idioma
+const listarProfissionalIdioma= async () => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
-    let resultFilmesGeneros = await filmeGeneroDAO.getSelectAllMoviesGenres()
+    let resultProfissionalIdioma = await profissionalIdiomaDAO.getSelectAllProfissionalIdioma()
+    console.log(resultProfissionalIdioma)
     try {
-        if (resultFilmesGeneros) {
-            if (resultFilmesGeneros.length > 0) {
+        if (resultProfissionalIdioma) {
+            if (resultProfissionalIdioma.length > 0) {
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                 MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
-                MENSSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
+                MENSSAGES.DEFAULT_HEADER.items.profissional_idioma = resultProfissionalIdioma
 
                 return MENSSAGES.DEFAULT_HEADER//201
             } else {
@@ -36,23 +37,23 @@ const listarFilmesGenero = async () => {
 }
 
 
-//Retorna o gênero pelo Id
-const buscarFilmeGeneroId = async (id) => {
+//Retorna o profissional e idioma pelo Id
+const buscarProfissionalIdiomaId = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     try {
         //Validação da chegada do ID
         if (!isNaN(id) && id != null && id > 0) {
-            //cria uma variável local para executar a função getSelectByFilms, passando para ela o ID
-            let resultFilmesGeneros = await filmeGeneroDAO.getSelectByGenre(Number(id))
+           
+            let resultProfissionalIdioma = await profissionalIdiomaDAO.getSelectByProfissionalIdioma(Number(id))
 
-            //Se getSelectByFilms tiver sido executado corretamente  ele vai passar nessa primeira verificação, já caso algo estiver errado o valor de resultFilmes será false
-            if (resultFilmesGeneros) {
-                //Verificando se resulfilmes não está vazio
-                if (resultFilmesGeneros.length > 0) {
+        
+            if (resultProfissionalIdioma) {
+               
+                if (resultProfissionalIdioma.length > 0) {
                     MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                     MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
-                    MENSSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
+                    MENSSAGES.DEFAULT_HEADER.items.profissional_idioma = resultProfissionalIdioma
 
                     return MENSSAGES.DEFAULT_HEADER//200
                 } else {
@@ -74,23 +75,22 @@ const buscarFilmeGeneroId = async (id) => {
     }
 }
 
-//Retorna o gênero pelo Id
-const buscarFilmeId = async (id) => {
+//Retorna o profissional e idioma pelo id do idioma
+const buscarProfissionalIdIdioma = async (id_idioma) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     try {
         //Validação da chegada do ID
-        if (!isNaN(id) && id != null && id > 0) {
-            //cria uma variável local para executar a função getSelectByFilms, passando para ela o ID
-            let resultFilmesGeneros = await filmeGeneroDAO.getSelectByMovieId(Number(id))
+        if (!isNaN(id_idioma) && id_idioma != null && id_idioma > 0) {
+           
+            let resultProfissionalIdioma = await profissionalIdiomaDAO.getSelectProfissionalIdiomaByIdiomas(Number(id_idioma))
 
-            //Se getSelectByFilms tiver sido executado corretamente  ele vai passar nessa primeira verificação, já caso algo estiver errado o valor de resultFilmes será false
-            if (resultFilmesGeneros) {
-                //Verificando se resulfilmes não está vazio
-                if (resultFilmesGeneros.length > 0) {
+            if (resultProfissionalIdioma) {
+                
+                if (resultProfissionalIdioma.length > 0) {
                     MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                     MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
-                    MENSSAGES.DEFAULT_HEADER.items.filmes = resultFilmesGeneros
+                    MENSSAGES.DEFAULT_HEADER.items.profissional_idioma = resultProfissionalIdioma
 
                     return MENSSAGES.DEFAULT_HEADER//200
                 } else {
@@ -111,22 +111,23 @@ const buscarFilmeId = async (id) => {
         return MENSSAGES.ERROR_REQUIRED_FIELDS//400
     }
 }
-const listarGenerosIdFilme = async (idFilme) => {
+
+//Retorna o profissional e idioma pelo id do profissional
+const buscarProfissionalIdProfissional = async (id_profissional) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     try {
         //Validação da chegada do ID
-        if (!isNaN(idFilme) && idFilme != null && idFilme > 0) {
-            //cria uma variável local para executar a função getSelectByFilms, passando para ela o ID
-            let resultFilmesGeneros = await filmeGeneroDAO.getSelectGenresByidMovies(Number(idFilme))
+        if (!isNaN(id_profissional) && id_profissional != null && id_profissional > 0) {
+           
+            let resultProfissionalIdioma = await profissionalIdiomaDAO.getSelectProfissionalIdiomaByProfissional(Number(id_profissional))
 
-            //Se getSelectByFilms tiver sido executado corretamente  ele vai passar nessa primeira verificação, já caso algo estiver errado o valor de resultFilmes será false
-            if (resultFilmesGeneros) {
-                //Verificando se resulfilmes não está vazio
-                if (resultFilmesGeneros.length > 0) {
+            if (resultProfissionalIdioma) {
+                
+                if (resultProfissionalIdioma.length > 0) {
                     MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                     MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
-                    MENSSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
+                    MENSSAGES.DEFAULT_HEADER.items.profissional_idioma = resultProfissionalIdioma
 
                     return MENSSAGES.DEFAULT_HEADER//200
                 } else {
@@ -148,22 +149,29 @@ const listarGenerosIdFilme = async (idFilme) => {
     }
 }
 
-const listarFilmesIdGenero = async (idGenero) => {
+//Lista os idiomas de um profissional
+const listaridiomaByProfissional = async (id_profissional) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     try {
         //Validação da chegada do ID
-        if (!isNaN(idGenero) && idGenero != null && idGenero > 0) {
-            //cria uma variável local para executar a função getSelectByFilms, passando para ela o ID
-            let resultFilmesGeneros = await filmeGeneroDAO.getSelectMoviesByIdGenres(Number(idGenero))
+        if (!isNaN(id_profissional) && id_profissional != null && id_profissional > 0) {
+          
+            let resultProfissionalIdioma = await profissionalIdiomaDAO.getSelectIdiomaByProfessional(Number(id_profissional))
 
-            //Se getSelectByFilms tiver sido executado corretamente  ele vai passar nessa primeira verificação, já caso algo estiver errado o valor de resultFilmes será false
-            if (resultFilmesGeneros) {
+         
+            if (resultProfissionalIdioma) {
                 //Verificando se resulfilmes não está vazio
-                if (resultFilmesGeneros.length > 0) {
+                if (resultProfissionalIdioma.length > 0) {
+                    resultProfissionalIdioma.forEach(profissional => {
+                        delete profissional.id
+                        delete profissional.id_profissional
+                        delete profissional.nome
+
+                    })
                     MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                     MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
-                    MENSSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
+                    MENSSAGES.DEFAULT_HEADER.items.profissional_idioma = resultProfissionalIdioma
 
                     return MENSSAGES.DEFAULT_HEADER//200
                 } else {
@@ -185,27 +193,65 @@ const listarFilmesIdGenero = async (idGenero) => {
     }
 }
 
-//Insere um gênero 
-const inserirFilmeGenero = async (filmeGenero, contentType) => {
+//Lista os profissionais de um idioma
+const listarProfissionalByIdioma = async (id_idioma) => {
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+
+    try {
+        //Validação da chegada do ID
+        if (!isNaN(id_idioma) && id_idioma != null && id_idioma > 0) {
+            //cria uma variável local para executar a função getSelectByFilms, passando para ela o ID
+            let resultProfissionalIdioma = await profissionalIdiomaDAO.getSelectProfissionalByIdiomas(Number(id_idioma))
+
+            
+            if (resultProfissionalIdioma) {
+                
+                if (resultProfissionalIdioma.length > 0) {
+                    MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
+                    MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code
+                    MENSSAGES.DEFAULT_HEADER.items.profissional_idioma = resultProfissionalIdioma
+
+                    return MENSSAGES.DEFAULT_HEADER//200
+                } else {
+                    return MENSSAGES.ERROR_NOT_FOUND//404
+                }
+            } else {
+                return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL//500
+            }
+
+        } else {
+
+            MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[ID incorreto]'
+            return MENSSAGES.ERROR_REQUIRED_FIELDS//400
+
+        }
+
+    } catch (error) {
+        return MENSSAGES.ERROR_REQUIRED_FIELDS//400
+    }
+}
+
+//Inseri um profissionalIdioma no banco
+const inserirProfissionalIdioma = async (ProfissionalIdioma, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     try {
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-            let validar = await validarfilmesGenero(filmeGenero);
+            let validar = await validarProfissionalIdioma(ProfissionalIdioma);
 
             if (!validar) {
 
-                let resultFilmesGeneros = await filmeGeneroDAO.setInsertMoviesGenres(filmeGenero)
+                let resultProfissionalIdioma = await profissionalIdiomaDAO.setInsertProfissionalIdioma(ProfissionalIdioma)
 
-                if (resultFilmesGeneros) {
+                if (resultProfissionalIdioma) {
 
-                    let ultimoId = await filmeGeneroDAO.getSelectLastId()
+                    let ultimoId = await profissionalIdiomaDAO.getSelectLastId()
                     if (ultimoId) {
-                        filmeGenero.id = ultimoId
+                        ProfissionalIdioma.id = ultimoId
                         MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_CREATED_ITEM.status
                         MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_CREATED_ITEM.status_code
                         MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_CREATED_ITEM.message
-                        MENSSAGENS.DEFAULT_HEADER.items = filmeGenero
+                        MENSSAGENS.DEFAULT_HEADER.items.profissional_idioma = ProfissionalIdioma
 
                         return MENSSAGENS.DEFAULT_HEADER//200
 
@@ -223,13 +269,14 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
             return MENSSAGENS.ERROR_CONTENT_TYPE//415
         }
     } catch (error) {
+        console.log(error)
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 
 }
 
-//Atualizar os dados de um gênero
-const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
+//Atualizar os dados de um profissionalIdioma
+const atualizarProfissionalIdioma = async (ProfissionalIdioma, id, contentType) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     try {
@@ -239,23 +286,23 @@ const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
             // Validação de id, se existe no BD
 
             //Chama a função de validar todos os dados
-            let validar = await validarfilmesGenero(filmeGenero)
+            let validar = await validarProfissionalIdioma(ProfissionalIdioma)
 
             if (!validar) {
                 // Validação de id, chamndo a função que verifica no BD
-                let validarId = await buscarFilmeGeneroId(id)
+                let validarId = await buscarProfissionalIdiomaId(id)
                 if (validarId.status_code == 200) {
                     // adiciona o ID no JSON de dados para ser encaminhado
-                    filmeGenero.id = Number(id)
+                    ProfissionalIdioma.id = Number(id)
 
                     //Chama a função para inserir um novo item no BD
-                    let resultFilmesGeneros = await filmeGeneroDAO.setUpdateMoviesGenres(filmeGenero)
-                    if (resultFilmesGeneros) {
+                    let resultProfissionalIdioma = await profissionalIdiomaDAO.setUpdateProfissionalIdioma(ProfissionalIdioma)
+                    if (resultProfissionalIdioma) {
 
                         MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_UPDATE_ITEM.status
                         MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_UPDATE_ITEM.status_code
                         MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_UPDATE_ITEM.message
-                        MENSSAGES.DEFAULT_HEADER.items.filmes_generos = filmeGenero
+                        MENSSAGES.DEFAULT_HEADER.items.profissional_idioma = ProfissionalIdioma
 
 
                         return MENSSAGES.DEFAULT_HEADER//200
@@ -281,17 +328,17 @@ const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
 }
 
 
-//Valida os dados de um gênero
-const validarfilmesGenero = async (filmeGenero) => {
+//Valida os dados de um profissionalIdioma
+const validarProfissionalIdioma = async (ProfissionalIdioma) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
     //Validação do nome
-    if (filmeGenero.id_filme <= 0 || isNaN(filmeGenero.id_filme) || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null || filmeGenero.id_filme == '') {
-        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Id filme incorreto]'
+    if (ProfissionalIdioma.id_profissional <= 0 || isNaN(ProfissionalIdioma.id_profissional) || ProfissionalIdioma.id_profissional == undefined || ProfissionalIdioma.id_profissional == null || ProfissionalIdioma.id_profissional == '') {
+        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Id profissional incorreto]'
         return MENSSAGES.ERROR_REQUIRED_FIELDS
     }
-    else if (filmeGenero.id_genero <= 0 || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null || filmeGenero.id_genero == '') {
-        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Id gênero incorreto]'
+    else if (ProfissionalIdioma.id_idioma <= 0 || isNaN(ProfissionalIdioma.id_idioma) || ProfissionalIdioma.id_idioma == undefined || ProfissionalIdioma.id_idioma == null || ProfissionalIdioma.id_idioma == '') {
+        MENSSAGES.ERROR_REQUIRED_FIELDS.message += '[Id idioma incorreto]'
         return MENSSAGES.ERROR_REQUIRED_FIELDS
     }
 
@@ -300,24 +347,59 @@ const validarfilmesGenero = async (filmeGenero) => {
     }
 }
 
-//Deleta um gênero pelo ID
-const excluirFilmeGenero = async (id) => {
+//Deleta um profissionalIdioma pelo ID
+const excluirProfissionalIdioma = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     //Chama a funçã do DAO para retornar a lista de filmes do BD
     try {
 
-        let validarId = await buscarFilmeGeneroId(id)
+        let validarId = await buscarProfissionalIdiomaId(id)
         if (validarId.status_code == 200) {
 
-            let deletarFilmeGeneros = await filmeGeneroDAO.setDeleteMoviesGenres(id);
-            if (deletarFilmeGeneros) {
+            let deletarProfissionalIdioma = await profissionalIdiomaDAO.setDeleteProfissionalIdioma(id);
+            if (deletarProfissionalIdioma) {
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
                 MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
                 MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
                 delete MENSSAGES.DEFAULT_HEADER.items
                 return MENSSAGES.DEFAULT_HEADER
             } else {
-                MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+                return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+
+        } else {
+            return validarId
+        }
+
+    } catch (error) {
+        
+        return MENSSAGES.ERROR_INTERNAL_SERVER_CONTRLOLLER
+    }
+
+
+
+
+}
+
+//Excluir profissionalIdioma pelo id do profissional
+const excluirIdiomasid_profissional = async (id) => {
+    let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
+    //Chama a funçã do DAO para retornar a lista de filmes do BD
+    try {
+
+        let validarId = await buscarProfissionalIdProfissional(id)
+        if (validarId.status_code == 200) {
+
+            let deletarProfissionalIdioma = await profissionalIdiomaDAO.setDeleteIdiomaByProfissional(id);
+            if (deletarProfissionalIdioma) {
+                MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
+                MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
+                MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
+                delete MENSSAGES.DEFAULT_HEADER.items
+                return MENSSAGES.DEFAULT_HEADER
+            } else {
+                return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
             }
 
 
@@ -333,25 +415,26 @@ const excluirFilmeGenero = async (id) => {
 
 
 }
-
-//Excluir generos
-const excluirGenerosIdFilme = async (id) => {
+//Excluir profissionalIdioma pelo id do idioma
+const excluirProfissionalId_idiomas = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     //Chama a funçã do DAO para retornar a lista de filmes do BD
     try {
 
-        let validarId = await buscarFilmeId(id)
+        let validarId = await buscarProfissionalIdIdioma(id)
+     
         if (validarId.status_code == 200) {
-
-            let deletarFilmeGeneros = await filmeGeneroDAO.setDeleteGenderesByidMovie(id);
-            if (deletarFilmeGeneros) {
+   
+            let deletarProfissionalIdioma = await profissionalIdiomaDAO.setDeleteProfissionalByIdioma(id);
+            console.log(id)
+            if (deletarProfissionalIdioma) {
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_DELETE.status
                 MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_DELETE.status_code
                 MENSSAGES.DEFAULT_HEADER.message = MENSSAGES.SUCCESS_DELETE.message
                 delete MENSSAGES.DEFAULT_HEADER.items
                 return MENSSAGES.DEFAULT_HEADER
             } else {
-                MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
+                return MENSSAGES.ERROR_INTERNAL_SERVER_MODEL
             }
 
 
@@ -368,5 +451,15 @@ const excluirGenerosIdFilme = async (id) => {
 
 }
 module.exports = {
-   
+   listarProfissionalIdioma,
+   listarProfissionalByIdioma,
+   listaridiomaByProfissional,
+   buscarProfissionalIdIdioma,
+   buscarProfissionalIdProfissional,
+   buscarProfissionalIdiomaId,
+   inserirProfissionalIdioma,
+   atualizarProfissionalIdioma,
+   excluirProfissionalIdioma,
+   excluirIdiomasid_profissional,
+   excluirProfissionalId_idiomas
 }

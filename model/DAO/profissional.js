@@ -53,7 +53,7 @@ const setDeleteprofissional = async (id) => {
     try {
         let sql = `delete from tbl_profissional where id_profissional = ${id}`
 
-        let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
         if (result)
             return true
         else
@@ -89,12 +89,12 @@ const setUpdateProfissional = async (profissional) => {
              nome_artistico ='${profissional.nome_artistico}',
              foto = '${profissional.foto}',
              data_falecimento =${profissional.data_falecimento ? `'${profissional.data_falecimento}'` : 'NULL'},
-             rede_social = '${profissional.rede_social ? `'${profissional.rede_social}'` : 'Null'}',
+             rede_social = ${profissional.rede_social ? `'${profissional.rede_social}'` : 'Null'},
              biografia ='${profissional.biografia}',
              sexo ='${profissional.sexo}'
              where id_profissional = ${profissional.id};`
 
-        let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
 
         if (result)
@@ -103,6 +103,7 @@ const setUpdateProfissional = async (profissional) => {
             return false
 
     } catch (error) {
+        console.log(error)
         return false
     }
 }
@@ -163,7 +164,7 @@ const setProfissional = async (profissional) => {
 
             ); `
         }
-        let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
         if (result)
             return true
@@ -171,6 +172,7 @@ const setProfissional = async (profissional) => {
             return false
 
     } catch (error) {
+        console.log(error)
         return false
     }
 }

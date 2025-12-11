@@ -30,7 +30,6 @@ const listarFilmes = async () => {
                     if (resultGenerosFilme.status_code == 200) {
                         filme.genero = resultGenerosFilme.items.filmes_generos
                     }
-
                 }
                 MENSSAGES.DEFAULT_HEADER.status = MENSSAGES.SUCCESS_REQUEST.status
                 MENSSAGES.DEFAULT_HEADER.status_code = MENSSAGES.SUCCESS_REQUEST.status_code

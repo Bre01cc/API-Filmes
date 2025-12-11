@@ -8,6 +8,7 @@
 
 //Imports
 const idiomaDAO = require('../../model/DAO/idioma.js')
+const ControllerProfissionalIdioma = require('../profissional/profissional_idioma.js')
 const DEFAULT_MENSSAGENS = require('../modulo/config_menssages.js')
 
 
@@ -87,12 +88,20 @@ const excluirIdioma = async (id) => {
         let validarId = await buscarIdiomasId(id)
         if (validarId.status_code == 200) {
 
-            let deletarIdioma = await idiomaDAO.setDeleteIdioma(id);
-            MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_DELETE.status
-            MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_DELETE.status_code
-            MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_DELETE.message
-            delete MENSSAGENS.DEFAULT_HEADER.items
-            return MENSSAGENS.DEFAULT_HEADER
+            let excluirProfissionalIdiomas = await ControllerProfissionalIdioma.excluirProfissionalId_idiomas(id)
+
+            if (excluirProfissionalIdiomas.status_code == 500) {
+                return MENSSAGENS.ERROR_RELATION_TABLE
+            } else {
+                let deletarIdioma = await idiomaDAO.setDeleteIdioma(id);
+                MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_DELETE.status
+                MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_DELETE.status_code
+                MENSSAGENS.DEFAULT_HEADER.message = MENSSAGENS.SUCCESS_DELETE.message
+                delete MENSSAGENS.DEFAULT_HEADER.items
+                return MENSSAGENS.DEFAULT_HEADER
+
+            }
+
 
         } else {
             return validarId
@@ -246,10 +255,6 @@ const validarIdioma = async (idioma, atualizar) => {
         }
 
     }
-
-
-
-
     else {
         return false
     }

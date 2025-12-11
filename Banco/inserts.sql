@@ -1,3 +1,11 @@
+INSERT INTO tbl_idioma (sigla, data_criacao, descricao, familia_linguistica, antes_de_cristo) VALUES
+('PT', '1290-01-01', 'Língua portuguesa antiga, base do português moderno.', 'Indo-Europeia', FALSE),
+('EN', '0950-01-01', 'Inglês antigo que evoluiu para o inglês médio e moderno.', 'Indo-Europeia', FALSE),
+('LA', '0700-01-01', 'Latim clássico, origem de várias línguas românicas.', 'Itálica', FALSE),
+('GR', '0500-01-01', 'Grego clássico, base da cultura ocidental.', 'Helênica', FALSE),
+('HE', '1200-01-01', 'Hebraico antigo, amplamente utilizado em textos religiosos.', 'Semítica', TRUE);
+
+
 -- =============================================================
 -- 1) INSERT: Gêneros
 -- =============================================================
@@ -101,11 +109,21 @@ INSERT INTO tbl_profissional_idioma (id_profissional, id_idioma)
 VALUES (1, 3);
 
 -- =============================================================
--- 9) INSERT: Profissional x idioma
+-- 9) INSERT: Profissional x nacionalidade
 -- =============================================================
 
 INSERT INTO tbl_profissional_nacionalidade (id_profissional, id_nacionalidade)
-VALUES (1, 3);
+VALUES 
+(1, 1),
+(1, 3),
+(2, 2),
+(2, 5),
+(3, 1),
+(3, 4),
+(4, 2),
+(4, 3),
+(5, 5),
+(5, 4);
 
 -- =============================================================
 -- 10) INSERT: Evento

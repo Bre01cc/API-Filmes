@@ -9,7 +9,7 @@
 const filmeGeneroDAO = require('../../model/DAO/filme_genero.js')
 const DEFAULT_MENSSAGES = require('../modulo/config_menssages.js')
 
-//Retorna todos os gêneros
+//Retorna todos os filmeGeneros
 const listarFilmesGenero = async () => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -36,7 +36,7 @@ const listarFilmesGenero = async () => {
 }
 
 
-//Retorna o gênero pelo Id
+//Retorna o filmeGenero pelo Id
 const buscarFilmeGeneroId = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -74,7 +74,7 @@ const buscarFilmeGeneroId = async (id) => {
     }
 }
 
-//Retorna o gênero pelo Id
+//Retorna o filmeGenero pelo Id
 const buscarFilmeId = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -111,6 +111,8 @@ const buscarFilmeId = async (id) => {
         return MENSSAGES.ERROR_REQUIRED_FIELDS//400
     }
 }
+
+//Retorna o filmeGenero pelo id do filme
 const listarGenerosIdFilme = async (idFilme) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -148,6 +150,7 @@ const listarGenerosIdFilme = async (idFilme) => {
     }
 }
 
+//Retorna o filmeGenero pelo id genero
 const listarFilmesIdGenero = async (idGenero) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -185,7 +188,7 @@ const listarFilmesIdGenero = async (idGenero) => {
     }
 }
 
-//Insere um gênero 
+//Insere um filmeGenero
 const inserirFilmeGenero = async (filmeGenero, contentType) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     try {
@@ -228,7 +231,7 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
 
 }
 
-//Atualizar os dados de um gênero
+//Atualizar os dados de um filmeGenero
 const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -281,7 +284,7 @@ const atualizarFilmeGenero = async (filmeGenero, id, contentType) => {
 }
 
 
-//Valida os dados de um gênero
+//Valida os dados de um filmeGenero
 const validarfilmesGenero = async (filmeGenero) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
 
@@ -300,7 +303,7 @@ const validarfilmesGenero = async (filmeGenero) => {
     }
 }
 
-//Deleta um gênero pelo ID
+//Deleta um filmeGenero pelo ID
 const excluirFilmeGenero = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     //Chama a funçã do DAO para retornar a lista de filmes do BD
@@ -334,7 +337,7 @@ const excluirFilmeGenero = async (id) => {
 
 }
 
-//Excluir generos
+//Deleta um filmeGenero pelo ID do filme
 const excluirGenerosIdFilme = async (id) => {
     let MENSSAGES = JSON.parse(JSON.stringify(DEFAULT_MENSSAGES))
     //Chama a funçã do DAO para retornar a lista de filmes do BD

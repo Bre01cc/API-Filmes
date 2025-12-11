@@ -7,6 +7,7 @@
 
 //Imports
 const tipoDistribuidoraDAO = require('../../model/DAO/tipo_distribuidora')
+const controllerDistrbuidora = require('./../distribuidora/distribuidora_controller.js')
 const DEFAULT_MENSAGENS = require('../modulo/config_menssages.js')
 
 //Retorna todos os tipo de distribuidoras
@@ -77,13 +78,25 @@ const deletarTipoDistribuidoraId = async (id) => {
         let validarId = await buscarTipoDistribuidoraID(id)
         if (validarId.status_code == 200) {
 
-            let deletarTipoDistribuidora = await tipoDistribuidoraDAO.setDeletetipoDistribuidora(id)
-            MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
-            MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
-            MENSAGENS.DEFAULT_HEADER.message = MENSAGENS.SUCCESS_DELETE.message
-            delete MENSAGENS.DEFAULT_HEADER.items
+            let excluirDistribuidora = await controllerDistrbuidora.deletarDistribuidoraIdType(id)
+            if (excluirDistribuidora.status == 500) {
+                return MENSAGENS.ERROR_RELATION_TABLE
+            } else {
+                let deletarTipoDistribuidora = await tipoDistribuidoraDAO.setDeletetipoDistribuidora(id)
+                if (deletarTipoDistribuidora) {
+                    MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
+                    MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
+                    MENSAGENS.DEFAULT_HEADER.message = MENSAGENS.SUCCESS_DELETE.message
+                    delete MENSAGENS.DEFAULT_HEADER.items
 
-            return MENSAGENS.DEFAULT_HEADER
+                    return MENSAGENS.DEFAULT_HEADER
+                }else{
+                    return MENSAGENS.ERROR_INTERNAL_SERVER_MODEL
+                }
+
+            }
+
+
         } else {
             return validarId
         }
@@ -187,7 +200,7 @@ const atualizarTipoDistribuidora = async (tipoDistribuidora, id, contentType) =>
 }
 
 //Valida os dados de tipo de distruidora.
-const validarTipoDistribuidora= async (tipoDistribuidora) => {
+const validarTipoDistribuidora = async (tipoDistribuidora) => {
     let MENSSAGENS = JSON.parse(JSON.stringify(DEFAULT_MENSAGENS))
 
     if (tipoDistribuidora.nome == undefined || tipoDistribuidora.nome == null || tipoDistribuidora.nome == "" || tipoDistribuidora.nome.length > 100) {
@@ -208,7 +221,7 @@ const validarTipoDistribuidora= async (tipoDistribuidora) => {
 
 
 //Exports
-module.exports ={
+module.exports = {
     listarTipoDistribuidora,
     buscarTipoDistribuidoraID,
     deletarTipoDistribuidoraId,

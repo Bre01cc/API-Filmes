@@ -17,12 +17,12 @@ const prisma = new PrismaClient()
 //executeRaw()        -> permite executar comandos sem  estar em uma variável e não retorna nenhum dados, no caso injeta dados no banco.
 
 //Retorna todos os cadastro de profissional e idioma
-const getSelectAllProfessionalIdioma = async () => {
+const getSelectAllProfissionalIdioma = async () => {
     try {
 
         let sql = 'select * from vw_profissional_idioma order by id desc'
 
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
             return result
         }
@@ -30,16 +30,17 @@ const getSelectAllProfessionalIdioma = async () => {
             return false
         }
     } catch (error) {
+        console.log(error)
         return false
     }
 }
 // Retorna apenas um cadastro de profissional e idioma pelo id
-const getSelectByProfessionalIdioma = async (id) => {
+const getSelectByProfissionalIdioma = async (id) => {
     try {
 
-        let sql = `select * from vw_profissional_idioma where id = ${id}`
+        let sql = `select * from tbl_profissional_idioma where id = ${id}`
 
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
             return result
         }
@@ -57,7 +58,7 @@ const getSelectIdiomaByProfessional = async (id) => {
 
         let sql = `select * from vw_profissional_idioma where id_profissional = ${id}`
 
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
         if (Array.isArray(result)) {
             return result
         }
@@ -69,8 +70,56 @@ const getSelectIdiomaByProfessional = async (id) => {
     }
 }
 
-// Retorna apenas um cadastro de profissional e nacionalidade pelo id do idioma
-const getSelectProfessionalByIdiomas = async (id) => {
+
+
+// Retorna apenas um cadastro de profissional e idioma pelo id do idioma
+const getSelectProfissionalIdiomaByIdiomas = async (id) => {
+
+    try {
+
+        //Emcaminha para o BD o script SQL
+
+        let sql = `select * from tbl_profissional_idioma where id_idioma = ${id}`
+
+        let result = await prisma.$queryRawUnsafe(sql)
+        //Verificando se o result tem algo dentro dele
+        if (Array.isArray(result))
+
+
+            return result
+        else
+            return false
+
+
+    } catch (error) {
+        return false
+
+    }
+
+}
+
+// Retorna apenas um cadastro de profissional e idioma pelo id do profissional
+const getSelectProfissionalIdiomaByProfissional = async (id) => {
+    try {
+
+        let sql = `select * from tbl_profissional_idioma where id_profissional = ${id}`
+
+          let result = await prisma.$queryRawUnsafe(sql)
+        if (Array.isArray(result)) {
+            return result
+        }
+        else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+
+
+// Retorna apenas um cadastro de profissional e idioma pelo id do idioma
+const getSelectProfissionalByIdiomas = async (id) => {
 
     try {
 
@@ -78,7 +127,7 @@ const getSelectProfessionalByIdiomas = async (id) => {
 
         let sql = `select * from vw_profissional_idioma where id_idioma = ${id}`
 
-        let result = await prisma.$queryRawUnsafe(sql)
+         let result = await prisma.$queryRawUnsafe(sql)
         //Verificando se o result tem algo dentro dele
         if (Array.isArray(result))
 
@@ -113,13 +162,13 @@ const getSelectLastId = async () => {
 }
 
 //Inseri um novo profissional e idioma
-const setInsertProfessionalIdioma = async (profissionalIdioma) => {
+const setInsertProfissionalIdioma = async (profissionalIdioma) => {
 
     try {
-       
+
 
         let sql = `
-     tbl_profissional_idioma (
+    Insert into tbl_profissional_idioma (
         id_profissional,
         id_idioma
     ) VALUES (
@@ -140,10 +189,10 @@ const setInsertProfessionalIdioma = async (profissionalIdioma) => {
 }
 
 //Deleta um profissional e idioma pelo id
-const setUpdateProfessionalIdioma = async (profissionalIdioma) => {
+const setUpdateProfissionalIdioma = async (profissionalIdioma) => {
 
     try {
-       
+
 
         let sql = `
     Update tbl_profissional_idioma 
@@ -164,7 +213,7 @@ const setUpdateProfessionalIdioma = async (profissionalIdioma) => {
 }
 
 //Deleta um profissional e idioma pelo id
-const setDeleteProfessionalIdioma = async (id) => {
+const setDeleteProfissionalIdioma = async (id) => {
     try {
         let sql = `delete from tbl_profissional_idioma where id = ${id}`
 
@@ -182,7 +231,7 @@ const setDeleteProfessionalIdioma = async (id) => {
 }
 
 //Deleta um profissional e idioma pelo id do profissional
-const setDeleteIdiomaByProfessional = async (id_profissional) => {
+const setDeleteIdiomaByProfissional = async (id_profissional) => {
     try {
 
         let sql = `delete from tbl_profissional_idioma where id_profissional = ${id_profissional}`
@@ -200,10 +249,10 @@ const setDeleteIdiomaByProfessional = async (id_profissional) => {
 }
 
 //Deleta um profissional e idioma pelo id do idioma
-const setDeleteProfessionalByIdioma = async (id_idioma) => {
+const setDeleteProfissionalByIdioma = async (id_idioma) => {
     try {
 
-        let sql = `delete from tbl_profissional_nacionalidade where id_idioma = ${id_idioma}`
+        let sql = `delete from tbl_profissional_idioma where id_idioma = ${id_idioma}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result) {
@@ -218,15 +267,17 @@ const setDeleteProfessionalByIdioma = async (id_idioma) => {
 }
 
 module.exports = {
-    getSelectAllProfessionalIdioma,
-    getSelectByProfessionalIdioma,
+    getSelectAllProfissionalIdioma,
+    getSelectByProfissionalIdioma,
     getSelectIdiomaByProfessional,
-    getSelectProfessionalByIdiomas,
+    getSelectProfissionalIdiomaByIdiomas,
+    getSelectProfissionalIdiomaByProfissional,
+    getSelectProfissionalByIdiomas,
     getSelectLastId,
-    setInsertProfessionalIdioma,
-    setUpdateProfessionalIdioma,
-    setDeleteProfessionalIdioma,
-    setDeleteIdiomaByProfessional,
-    setDeleteProfessionalByIdioma
+    setInsertProfissionalIdioma,
+    setUpdateProfissionalIdioma,
+    setDeleteProfissionalIdioma,
+    setDeleteIdiomaByProfissional,
+    setDeleteProfissionalByIdioma
 }
 

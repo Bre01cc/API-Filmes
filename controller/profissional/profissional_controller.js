@@ -8,6 +8,8 @@
 
 //Imports
 const profissionalDAO = require('../../model/DAO/profissional.js')
+const ControllerProfissionalNacionalidade = require('./profissional_nacionalidade.js')
+const ControllerProfissionalIdioma = require('./profissional_idioma.js')
 const DEFAULT_MENSAGENS = require('../modulo/config_menssages.js')
 
 //Retorna todos os profissionais
@@ -18,6 +20,20 @@ const listarProfissional = async () => {
     try {
         if (resultProfissional) {
             if (resultProfissional.length > 0) {
+                for (profissional of resultProfissional) {
+                    let resultNacionalidadeProfissional = await ControllerProfissionalNacionalidade.listarNacionalidadeByProfissional(profissional.id_profissional)
+
+                    if (resultNacionalidadeProfissional.status_code == 200) {
+
+                        profissional.nacionalidade = resultNacionalidadeProfissional.items.profissional_nacionalidade
+                    }
+
+                    let resultIdiomaProfissional = await ControllerProfissionalIdioma.listaridiomaByProfissional(profissional.id_profissional)
+                    if (resultIdiomaProfissional.status_code == 200) {
+                        profissional.idioma = resultIdiomaProfissional.items.profissional_idioma
+                    }
+                }
+
                 MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_REQUEST.status
                 MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_REQUEST.status_code
                 MENSSAGENS.DEFAULT_HEADER.items.profissional = resultProfissional
@@ -49,6 +65,17 @@ const buscarProfissionalID = async (id) => {
 
                 if (resultProfissional.length > 0) {
 
+                    for (profissional of resultProfissional) {
+                        let resultNacionalidadeProfissional = await ControllerProfissionalNacionalidade.listarNacionalidadeByProfissional(profissional.id_profissional)
+                        if (resultNacionalidadeProfissional.status_code == 200) {
+
+                            profissional.nacionalidade = resultNacionalidadeProfissional.items.profissional_nacionalidade
+                        }
+                        let resultIdiomaProfissional = await ControllerProfissionalIdioma.listaridiomaByProfissional(profissional.id_profissional)
+                        if (resultIdiomaProfissional.status_code == 200) {
+                            profissional.idioma = resultIdiomaProfissional.items.profissional_idioma
+                        }
+                    }
                     MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
                     MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
                     MENSAGENS.DEFAULT_HEADER.items.profissional = resultProfissional
@@ -78,13 +105,31 @@ const deletarProfissionalId = async (id) => {
         let validarId = await buscarProfissionalID(id)
         if (validarId.status_code == 200) {
 
-            let deletarProfissional = await profissionalDAO.setDeleteprofissional(id)
-            MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
-            MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
-            MENSAGENS.DEFAULT_HEADER.message = MENSAGENS.SUCCESS_DELETE.message
-            delete MENSAGENS.DEFAULT_HEADER.items
+            let excluirNacionalidade = await ControllerProfissionalNacionalidade.excluirNacionalidadeid_profissional(id)
+            let excluirIdioma = await ControllerProfissionalIdioma.excluirIdiomasid_profissional(id)
 
-            return MENSAGENS.DEFAULT_HEADER
+            if (excluirNacionalidade.status_code == 500) {
+
+                return MENSAGENS.ERROR_RELATION_TABLE
+
+            }
+            else if (excluirIdioma.status_code == 500) {
+                return MENSAGENS.ERROR_RELATION_TABLE
+            }
+            else {
+                let deletarProfissional = await profissionalDAO.setDeleteprofissional(id)
+                if (deletarProfissional) {
+                    MENSAGENS.DEFAULT_HEADER.status = MENSAGENS.SUCCESS_REQUEST.status
+                    MENSAGENS.DEFAULT_HEADER.status_code = MENSAGENS.SUCCESS_REQUEST.status_code
+                    MENSAGENS.DEFAULT_HEADER.message = MENSAGENS.SUCCESS_DELETE.message
+                    delete MENSAGENS.DEFAULT_HEADER.items
+
+                    return MENSAGENS.DEFAULT_HEADER
+                } else {
+                    return MENSAGENS.ERROR_INTERNAL_SERVER_MODEL
+                }
+
+            }
         } else {
             return validarId
         }
@@ -109,6 +154,53 @@ const inserirProfissional = async (profissional, contentType) => {
                     let ultimoId = await profissionalDAO.getSelectLastIdProfissional()
 
                     if (ultimoId) {
+                        if (profissional.nacionalidade != undefined) {
+                            for (nacionalidade of profissional.nacionalidade) {
+                                let profissionalNacionalidade = {
+                                    id_profissional: ultimoId,
+                                    id_nacionalidade: nacionalidade.id_nacionalidade
+                                }
+
+                                let resultNacionalidadeProfissional = await ControllerProfissionalNacionalidade.inserirProfissionalNacionalidade(profissionalNacionalidade, contentType)
+
+                                if (resultNacionalidadeProfissional.status_code != 201) {
+                                    return MENSSAGENS.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                                } else {
+                                    //Processamento para trazer dados dos generos cadastratos na tabela  de relação
+                                    delete profissional.nacionalidade
+                                    console.log(ultimoId)
+                                    let nacionalidadeList = await ControllerProfissionalNacionalidade.listarNacionalidadeByProfissional(ultimoId)
+
+
+                                    profissional.nacionalidade = nacionalidadeList.items.profissional_nacionalidade
+
+                                }
+
+                            }
+                        }
+                        if (profissional.idioma != undefined) {
+                            for (idioma of profissional.idioma) {
+                                let profissionalIdioma = {
+                                    id_profissional: ultimoId,
+                                    id_idioma: idioma.id_idioma
+                                }
+
+                                let resultIdiomaProfissional = await ControllerProfissionalIdioma.inserirProfissionalIdioma(profissionalIdioma, contentType)
+
+                                if (resultIdiomaProfissional.status_code != 201) {
+                                    return MENSSAGENS.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                                } else {
+
+                                    delete profissional.idioma
+                                    let idiomaList = await ControllerProfissionalIdioma.listaridiomaByProfissional(ultimoId)
+
+
+                                    profissional.idioma = idiomaList.items.profissional_idioma
+                                }
+
+                            }
+                        }
+
                         profissional.id = ultimoId
                         MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_CREATED_ITEM.status
                         MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_CREATED_ITEM.status_code
@@ -132,7 +224,7 @@ const inserirProfissional = async (profissional, contentType) => {
         }
 
     } catch (error) {
-           console.log(error)
+        console.log(error)
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
@@ -160,6 +252,62 @@ const atualizarProfissional = async (profissional, id, contentType) => {
 
                     let resultProfissional = await profissionalDAO.setUpdateProfissional(profissional)
                     if (resultProfissional) {
+                        let excluirNacionalidade = await ControllerProfissionalNacionalidade.excluirNacionalidadeid_profissional(id)
+
+                        if (excluirNacionalidade.status_code != 200 && excluirNacionalidade.status_code != 404) {
+
+                            return MENSSAGENS.ERROR_RELATION_TABLE
+
+                        } else {
+                            for (nacionalidade of profissional.nacionalidade) {
+                                let profissionalNacionalidade = {
+                                    id_profissional: id,
+                                    id_nacionalidade: nacionalidade.id_nacionalidade
+                                }
+
+                                let resultNacionalidadeProfissional = await ControllerProfissionalNacionalidade.inserirProfissionalNacionalidade(profissionalNacionalidade, contentType)
+
+                                if (resultNacionalidadeProfissional.status_code != 201) {
+                                    return MENSSAGENS.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                                } else {
+                                    //Processamento para trazer dados dos generos cadastratos na tabela  de relação
+                                    // delete profissional.nacionalidade
+
+                                    let nacionalidadeList = await ControllerProfissionalNacionalidade.listarNacionalidadeByProfissional(id)
+
+
+                                    profissional.nacionalidade = nacionalidadeList.items.profissional_nacionalidade
+
+                                }
+
+                            }
+                        }
+
+                        let excluirIdioma = await ControllerProfissionalIdioma.excluirIdiomasid_profissional(id)
+                        if (excluirIdioma.status_code != 200 && excluirIdioma.status_code != 404) {
+                            return MENSSAGENS.ERROR_RELATION_TABLE
+                        } else {
+                            for (idioma of profissional.idioma) {
+                                let profissionalIdioma = {
+                                    id_profissional: id,
+                                    id_idioma: idioma.id_idioma
+                                }
+
+                                let resultIdiomaProfissional = await ControllerProfissionalIdioma.inserirProfissionalIdioma(profissionalIdioma, contentType)
+
+                                if (resultIdiomaProfissional.status_code != 201) {
+                                    return MENSSAGENS.ERROR_RELATION_TABLE // 200, porem com problemas na tabela de relação
+                                } else {
+
+                                    // delete profissional.idioma
+                                    let idiomaList = await ControllerProfissionalIdioma.listaridiomaByProfissional(id)
+
+
+                                    profissional.idioma = idiomaList.items.profissional_idioma
+                                }
+
+                            }
+                        }
 
                         MENSSAGENS.DEFAULT_HEADER.status = MENSSAGENS.SUCCESS_UPDATE_ITEM.status
                         MENSSAGENS.DEFAULT_HEADER.status_code = MENSSAGENS.SUCCESS_UPDATE_ITEM.status_code
@@ -185,7 +333,7 @@ const atualizarProfissional = async (profissional, id, contentType) => {
         }
 
     } catch (error) {
-     
+        console.log(error)
         return MENSSAGENS.ERROR_INTERNAL_SERVER_CONTRLOLLER
     }
 }
